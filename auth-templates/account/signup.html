@@ -1,21 +1,30 @@
 {% extends "account/base.html" %}
-
+{% load bootstrap3 %}
 {% load i18n %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Sign Up" %}</h1>
+<section class="login">
+  <div class="container">
+    <div class="banner-content">
 
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+      <h1><i class="fa fa-smile"></i> Earthruh</h1>
+      <form method="post" class="form-signin" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        <h3 class="form-signin-heading">Please register</h3>
+        {% bootstrap_form form %}
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="kafe-btn kafe-btn-mint btn-block" type="submit" name="subm">Sign Up</button>
+        <br />
+        <a class="btn btn-dark " href="{{ login_url }}" role="button">Already have an account? Click Here.</a>
+      </form>
 
+    </div>
+    <!--/. banner-content -->
+  </div><!-- /.container -->
+</section>
 {% endblock %}

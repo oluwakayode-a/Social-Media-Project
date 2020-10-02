@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'accounts',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
+    'bootstrap3',
 ]
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -53,6 +55,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_USERNAME_REQUIRED = True
+
+LOGIN_REDIRECT_URL = '/'
 
 
 AUTHENTICATION_BACKENDS = [
