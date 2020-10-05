@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import Profile, UserFollowing
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from .forms import ProfileForm
 
 User = get_user_model()
 
@@ -37,7 +38,31 @@ def unfollow(request, follow_id):
     get_following.delete()
 
     return HttpResponse('successful')
-    
+
+
+@login_required
+def profile(request):
+    user_profile = Profile.objects.get(user=request.user)
+
+    context = {
+        'profile' : user_profile
+    }
+    return render(request, 'accounts/photo_profile.html', context)
+
+
+@login_required
+def edit_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    form = ProfileForm(request.POST or None, request.FILES or None, instance=profile)
+    if form.is_valid():
+        form.save()
+
+        return redirect('/profile')
+    context = {
+        'form' : form
+    }
+    return render(request, 'accounts/edit_profile.html', context)
+
     
 
 

@@ -10,8 +10,11 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    website = models.URLField(default='www.earthruh.com')
+    bio = models.CharField(max_length=170, default="Input Bio Here.")
+    verified = models.BooleanField(default=False)
 
-    # add profile_pic etc later.
 
     def __str__(self):
         return self.user.username
