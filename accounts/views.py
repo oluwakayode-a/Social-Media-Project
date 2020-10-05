@@ -31,10 +31,10 @@ def follow(request, target_id):
 
 
 @login_required
-def unfollow(request, target_id):
-    user_to_unfollow = User.objects.get(id=target_id)
-    new_follow = get_object_or_404(UserFollowing, following_user_id=user_to_unfollow)
-    new_follow.delete()
+def unfollow(request, follow_id):
+    # To unfollow, simply delete the following entry
+    get_following = UserFollowing.objects.get(id=follow_id)
+    get_following.delete()
 
     return HttpResponse('successful')
     

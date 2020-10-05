@@ -16,8 +16,9 @@
 
         <h1>Following</h1>
         {% for user in request.user.following.all %}
+        <!-- Not really 'user', but the following entry. -->
         <p>
-            {{ user }}
+            {{ user }} - <a href="{% url 'accounts:unfollow' user.id %}">unfollow</a>
         </p>
         {% endfor %}
         
