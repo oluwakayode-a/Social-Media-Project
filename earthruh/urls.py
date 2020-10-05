@@ -21,7 +21,8 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('main.urls', 'main'))),
-    path('accounts/', include('allauth.urls'))
+    path('auth/', include('allauth.urls')),
+    path('', include(('accounts.urls', 'accounts'))),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

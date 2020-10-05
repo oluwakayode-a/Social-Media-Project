@@ -10,8 +10,24 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     # add profile_pic etc later.
 
+    def __str__(self):
+        return self.user.username
+
+
+class UserFollowing(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    following_user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user_id", "following_user_id")
+        ordering = ["-created"]
+
+    def __str__(self):
+        return f"{self.user_id} follows {self.following_user_id}"
 
 
 # Create New Profile on Sign Up
