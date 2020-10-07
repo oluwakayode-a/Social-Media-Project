@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-category_choices = {
+category_choices = [
         ('music' ,  "Music"),
         ('photography' , "Photography"),
         ('acting' , "Acting"),
@@ -22,7 +22,7 @@ category_choices = {
         ('spiritual' , "Spiritual"),
         ('fitness' , "Fitness"),
         ('auto' , "Auto/Moto")
-    }
+]
 
 
 class Post(models.Model):
@@ -31,10 +31,23 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    category = models.CharField(max_length=20, choices= category_choices, default="select option")
+    # category = models.CharField(max_length=20, choices= category_choices, default="select option")
+
+    def __str__(self):
+        return self.caption
 
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_user')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_post')
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user}'s comment on {self.post.caption[:50]}'"
     
