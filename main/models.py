@@ -35,11 +35,23 @@ class Post(models.Model):
 
     def __str__(self):
         return self.caption
+    
+
+    @property
+    def like_count(self):
+        return self.likes.all().count()
+    
+    @property
+    def comment_count(self):
+        return self.comments.all().count()
+    
+    def is_liked_by_user(self, user):
+        return True if self.likes.filter(user=user).exists() else False
 
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_user')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_post')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
 
 
 class Comment(models.Model):

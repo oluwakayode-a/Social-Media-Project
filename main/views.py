@@ -37,3 +37,21 @@ def add_comment(request):
         print('comment added')
 
         return redirect('main:index')
+
+
+@login_required
+def like_toggle(request, post_id):
+    post = Post.objects.get(id=post_id)
+    # check if user has liked post
+    if post.is_liked_by_user(request.user):
+        # remove the like
+        Like.objects.get(post=post, user=request.user).delete()
+    else:
+        new_like = Like.objects.create(
+            post=post,
+            user=request.user
+        )
+        new_like.save()
+
+    return redirect('main:index')
+
