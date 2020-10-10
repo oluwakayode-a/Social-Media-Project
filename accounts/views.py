@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import Profile, UserFollowing
+from .models import Profile, UserFollowing, Interest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .forms import ProfileForm
+from .forms import ProfileForm, InterestForm
 
 User = get_user_model()
 
@@ -62,6 +62,22 @@ def edit_profile(request):
         'form' : form
     }
     return render(request, 'accounts/edit_profile.html', context)
+
+@login_required
+def edit_interests(request):
+    form = InterestForm(request.POST or None)
+    if form.is_valid():
+        form.instance.user = request.user
+        form.save()
+        return redirect('/edit_profile')
+        # add interests to logged in user.
+    else:
+        print(form.errors)
+    context = {
+        'form' : form
+    }
+    return render(request, 'accounts/interests.html', context)
+
 
     
 

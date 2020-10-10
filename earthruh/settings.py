@@ -56,7 +56,12 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_USERNAME_REQUIRED = True
 
+ACCOUNT_FORMS = {
+    'signup': 'accounts.forms.CustomSignupForm',
+}
+
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/auth/login'
 
 
 AUTHENTICATION_BACKENDS = [

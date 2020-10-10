@@ -1,4 +1,5 @@
 from django.db import models
+from multiselectfield import MultiSelectField
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -8,9 +9,36 @@ class User(AbstractUser):
     pass
 
 
+class Interest(models.Model):
+    CHOICES = [
+        ('music' ,  "Music"),
+        ('photography' , "Photography"),
+        ('acting' , "Acting"),
+        ('art' , "Art"),
+        ('travel' , "Travel"),
+        ('sports' , "Sports"),
+        ('dance'  , "Dance"),
+        ('architectures' , "Architectures"),
+        ('humanity' , "Humanity"),
+        ('food' , "Food"),
+        ('fashion' , "Fashion"),
+        ('cricket' , "Cricket"),
+        ('comedy' , "comedy"),
+        ('education' , "Education"),
+        ('poetry' , "Poetry"),
+        ('spiritual' , "Spiritual"),
+        ('fitness' , "Fitness"),
+        ('auto' , "Auto/Moto")
+]
+    interests = MultiSelectField(choices=CHOICES)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    interests = models.ForeignKey(Interest, on_delete=models.CASCADE, related_name='profile', null=True, blank=True)
     website = models.URLField(default='www.earthruh.com')
     bio = models.CharField(max_length=170, default="Input Bio Here.")
     verified = models.BooleanField(default=False)

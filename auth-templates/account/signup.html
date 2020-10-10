@@ -14,10 +14,7 @@
         {% csrf_token %}
         <h3 class="form-signin-heading">Please register</h3>
         {% bootstrap_form form %}
-
-        {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-        {% endif %}
+        <input type="hidden" name="next" value="/edit_interests" />
         <button class="kafe-btn kafe-btn-mint btn-block" type="submit" name="subm">Sign Up</button>
         <br />
         <a class="btn btn-dark " href="{{ login_url }}" role="button">Already have an account? Click Here.</a>

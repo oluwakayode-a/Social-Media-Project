@@ -66,7 +66,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html"><i class="fab fa-instagram"></i> Fluffs</a>
+                    <a class="navbar-brand" href="/"><i class="fab fa-instagram"></i> Fluffs</a>
                 </div><!-- /.navbar-header -->
                 <div class="navbar-left">
                     <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -241,22 +241,22 @@
 
                         <li class="dropdown mega-avatar">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <span class="avatar w-32"><img src="{% static 'img/users/2.jpg' %}"
+                                <span class="avatar w-32"><img src="{{ request.user.profile.profile_pic.url }}"
                                         class="img-resonsive img-circle" width="25" height="25" alt="..."></span>
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                                 <span class="hidden-xs">
-                                    Alex Grantte
+                                    {{ request.user.get_full_name }}
                                 </span>
                             </a>
                             <div class="dropdown-menu w dropdown-menu-scale pull-right">
                                 <a class="dropdown-item" href="#"><span>New Story</span></a>
-                                <a class="dropdown-item" href="#"><span>Become a Member</span></a>
+                                <!-- <a class="dropdown-item" href="#"><span>Become a Member</span></a> -->
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"><span>Profile</span></a>
-                                <a class="dropdown-item" href="#"><span>Settings</span></a>
-                                <a class="dropdown-item" href="#">Need help?</a>
+                                <a class="dropdown-item" href="/profile/"><span>Profile</span></a>
+                                <!-- <a class="dropdown-item" href="#"><span>Settings</span></a> -->
+                                <!-- <a class="dropdown-item" href="#">Need help?</a> -->
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Sign out</a>
+                                <a class="dropdown-item" href="/auth/logout/">Sign out</a>
                             </div>
                         </li><!-- /navbar-item -->
 
@@ -282,7 +282,7 @@
                 </a>
             </div>
             <div class="p-2 nav-icon-lg dark-black" id="upload">
-                <a class="nav-icon" href="photo_upload.html"><em class="fab fa-instagram"></em>
+                <a class="nav-icon" href="/upload"><em class="fab fa-instagram"></em>
                     <span>Upload</span>
                 </a>
             </div>

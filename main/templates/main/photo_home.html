@@ -150,7 +150,7 @@
 					<div class="cardbox-like">
 						<ul>
 							<li><a href="{% url 'main:like' post.id %}" {% if post|has_liked:request.user %} style="color:#e16a70" {% else %} style="color:#b2b2b2" {% endif %}><i class="fa fa-heart"></i></a><span> {{ post.like_count }}</span></li>
-							<li><a href="#" title="" class="com"><i class="fa fa-comments"></i></a> <span
+							<li><a title="" class="com"><i class="fa fa-comments"></i></a> <span
 									class="span-last"> {{ post.comment_count }}</span></li>
 						</ul>
 					</div>
@@ -314,7 +314,7 @@
 	
 								<div class="modal-meta-bottom">
 									<ul>
-										<li><a class="modal-like" href="#"><i class="fa fa-heart"></i></a><span
+										<li><a class="modal-like" href="{% url 'main:like' post.id %}" {% if post|has_liked:request.user %} style="color:#e16a70" {% else %} style="color:#b2b2b2" {% endif %}><i class="fa fa-heart"></i></a><span
 												class="modal-one"> {{ post.like_count }}</span> |
 											<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
 												{{ post.comment_count }}</span> </li>

@@ -55,3 +55,19 @@ def like_toggle(request, post_id):
 
     return redirect('main:index')
 
+
+@login_required
+def upload(request):
+    if request.method == 'POST':
+        caption = request.POST['caption']
+        image = request.FILES['file-input']
+
+        new_post = Post.objects.create(
+            caption=caption,
+            image=image,
+            user=request.user
+        )
+        new_post.save()
+
+        return redirect('main:index')
+    return render(request, 'main/photo_upload.html')

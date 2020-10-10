@@ -3,27 +3,6 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-category_choices = [
-        ('music' ,  "Music"),
-        ('photography' , "Photography"),
-        ('acting' , "Acting"),
-        ('art' , "Art"),
-        ('travel' , "Travel"),
-        ('sports' , "Sports"),
-        ('dance'  , "Dance"),
-        ('architectures' , "Architectures"),
-        ('humanity' , "Humanity"),
-        ('food' , "Food"),
-        ('fashion' , "Fashion"),
-        ('cricket' , "Cricket"),
-        ('comedy' , "comedy"),
-        ('education' , "Education"),
-        ('poetry' , "Poetry"),
-        ('spiritual' , "Spiritual"),
-        ('fitness' , "Fitness"),
-        ('auto' , "Auto/Moto")
-]
-
 
 class Post(models.Model):
     caption = models.CharField(max_length=500, blank=True, null=True)
