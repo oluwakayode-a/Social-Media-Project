@@ -1,16 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Profile, UserFollowing, Interest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .forms import ProfileForm, InterestForm
+from main.models import Notification
 
 User = get_user_model()
 
 # Create your views here.
 def users_list(request):
     if request.user.is_authenticated:
-        users = Profile.objects.exclude(user=request.user)
+        users = Profile.objects.exclude(request.user)
     else:
         users = Profile.objects.all()
     context = {
@@ -28,7 +29,15 @@ def follow(request, target_id):
     )
     new_follow.save()
 
-    return HttpResponse('successful')
+    # create new notification
+    new_notification = Notification.objects.create(
+        user=user_to_follow,
+        notification_type='user-plus',
+        text=f'{request.user.get_full_name()} followed you'
+    )
+    new_notification.save()
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required

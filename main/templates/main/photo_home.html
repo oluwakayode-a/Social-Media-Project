@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% load check_post_liked %}
+{% load check_user_following %}
 {% block content %}
 <!-- ==============================================
 	 News Feed Section
@@ -124,26 +125,10 @@
 					<!--/ cardbox-item -->
 					<div class="cardbox-base">
 						<ul>
-							<li><a href="#"><img src="/static/img/users/1.jpg" class="img-responsive img-circle"
+							{% for like in post.likes.all %}
+							<li><a href="#"><img src="{{ like.user.profile.profile_pic.url }}" class="img-responsive img-circle"
 										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/2.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/3.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/4.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/5.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/6.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/7.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/8.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/9.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
-							<li><a href="#"><img src="/static/img/users/10.jpg" class="img-responsive img-circle"
-										alt="User"></a></li>
+							{% endfor %}
 						</ul>
 					</div>
 					<!--/ cardbox-base -->
@@ -166,54 +151,16 @@
 
 				<div class="suggestion-box full-width">
 					<div class="suggestions-list">
+						{% for user in suggested %}
 						<div class="suggestion-body">
-							<img class="img-responsive img-circle" src="/static/img/users/17.jpeg" alt="Image">
+							<img class="img-responsive img-circle" src="{{ user.profile.profile_pic.url }}" alt="Image">
 							<div class="name-box">
-								<h4>Anthony McCartney</h4>
-								<span>@antony</span>
+								<h4>{{ user.get_full_name }}</h4>
+								<span>@{{ user.username }}</span>
 							</div>
-							<span><i class="fa fa-plus"></i></span>
+							<span><a href="{% url 'accounts:follow' user.id %}"><i class="fa fa-plus"></i></a></span>
 						</div>
-						<div class="suggestion-body">
-							<img class="img-responsive img-circle" src="/static/img/users/16.jpg" alt="Image">
-							<div class="name-box">
-								<h4>Sean Coleman</h4>
-								<span>@sean</span>
-							</div>
-							<span><i class="fa fa-plus"></i></span>
-						</div>
-						<div class="suggestion-body">
-							<img class="img-responsive img-circle" src="/static/img/users/14.jpg" alt="Image">
-							<div class="name-box">
-								<h4>Francis Long</h4>
-								<span>@francis</span>
-							</div>
-							<span><i class="fa fa-plus"></i></span>
-						</div>
-						<div class="suggestion-body">
-							<img class="img-responsive img-circle" src="/static/img/users/11.jpg" alt="Image">
-							<div class="name-box">
-								<h4>Vanessa Wells</h4>
-								<span>@vannessa</span>
-							</div>
-							<span><i class="fa fa-plus"></i></span>
-						</div>
-						<div class="suggestion-body">
-							<img class="img-responsive img-circle" src="/static/img/users/9.jpg" alt="Image">
-							<div class="name-box">
-								<h4>Anna Morgan</h4>
-								<span>@anna</span>
-							</div>
-							<span><i class="fa fa-plus"></i></span>
-						</div>
-						<div class="suggestion-body">
-							<img class="img-responsive img-circle" src="/static/img/users/8.jpg" alt="Image">
-							<div class="name-box">
-								<h4>Clifford Graham</h4>
-								<span>@clifford</span>
-							</div>
-							<span><i class="fa fa-plus"></i></span>
-						</div>
+						{% endfor %}
 					</div>
 					<!--suggestions-list end-->
 				</div>
@@ -290,8 +237,13 @@
 											alt="Image" /></a>
 									<strong><a href="">{{ post.user.get_full_name }}</a></strong>
 									<span>{{ post.created | timesince }} ago</span><br />
-									<a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i>
-										Following</a>
+									{% is_following request.user post.user.id as user_is_following %}
+
+									{% if user_is_following  %}
+									<a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i> Following</a>
+									{% else %}
+									<a href="{% url 'accounts:follow' post.user.id %}" class="kafe kafe-btn-mint-small"><i class="fa fa-plus"></i> Follow</a>
+									{% endif %}
 								</div>
 								<!--/ img-poster -->
 	

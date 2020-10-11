@@ -41,4 +41,18 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.user}'s comment on {self.post.caption[:50]}'"
-    
+
+
+class Notification(models.Model):
+    CHOICES = [
+        ('comment', 'Comment'),
+        ('plus', 'Like'),
+        ('user-plus', 'Follow')
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=10, choices=CHOICES)
+    text = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text

@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('comment', views.add_comment, name='add_comment'),
     path('like/<int:post_id>', views.like_toggle, name='like'),
-    path('upload/', views.upload, name='upload')
+    path('upload/', views.upload, name='upload'),
+    path('explore/', views.explore, name='explore'),
 ]
 
