@@ -1,0 +1,1 @@
+web: gunicorn earthruh.wsgi --log-file -
