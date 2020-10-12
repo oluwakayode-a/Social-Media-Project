@@ -1,4 +1,6 @@
 {% extends 'main/base.html' %}
+{% load check_post_liked %}
+{% load check_user_following %}
 {% block content %}
 <!-- ==============================================
 	 News Feed Section
@@ -26,8 +28,10 @@
 						</div><!-- /entry-header -->
 						<div class="post-content">
 							<div class="author-post text-center">
+								{% if user.profile.profile_pic %}
 								<a href="#"><img class="img-fluid rounded-circle" src="{{ user.profile.profile_pic.url }}"
 										alt="Image"></a>
+								{% endif %}
 							</div><!-- /author -->
 							<div class="card-content">
 								<h4>{{ user.get_full_name }}</h4>
@@ -91,7 +95,7 @@
 				<div class="row">
 
 					<div class="col-md-8 modal-image">
-						<img class="img-responsive" src="/static/img/posts/6.jpg" alt="Image" />
+						<img class="img-responsive" src="{{ post.image.url }}" alt="Image" />
 					</div>
 					<!--/ col-md-8 -->
 					<div class="col-md-4 modal-meta">
@@ -101,99 +105,65 @@
 							</button>
 							<!--/ button -->
 							<div class="img-poster clearfix">
+								{% if post.user.profile.profile_pic %}
 								<a href=""><img class="img-responsive img-circle" src="/static/img/users/18.jpg"
 										alt="Image" /></a>
-								<strong><a href="">Benjamin</a></strong>
-								<span>12 minutes ago</span><br />
-								<a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i>
-									Following</a>
+								{% endif %}
+								<strong><a href="">{{ post.user.get_full_name }}</a></strong>
+								<span>{{ post.created | timesince }} ago</span><br />
+								{% is_following request.user post.user.id as user_is_following %}
+
+								{% if user_is_following  %}
+								<a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i> Following</a>
+								{% else %}
+								<a href="{% url 'accounts:follow' post.user.id %}" class="kafe kafe-btn-mint-small"><i class="fa fa-plus"></i> Follow</a>
+								{% endif %}
 							</div>
 							<!--/ img-poster -->
 
 							<ul class="img-comment-list">
+								{% for comment in post.comments.all %}
 								<li>
 									<div class="comment-img">
-										<img src="/static/img/users/17.jpeg" class="img-responsive img-circle"
+										{% if comment.user.profile.profile_pic. %}
+										<img src="{{ comment.user.profile.profile_pic.url }}" class="img-responsive img-circle"
 											alt="Image" />
+										{% endif %}
 									</div>
 									<div class="comment-text">
-										<strong><a href="">Anthony McCartney</a></strong>
-										<p>Hello this is a test comment.</p> <span class="date sub-text">on December
-											5th, 2016</span>
+										<strong><a href="">{{ comment.user.get_full_name }}</a></strong>
+										<p>{{ comment.text }}</p> <span class="date sub-text">on {{ comment.created }}</span>
 									</div>
 								</li>
-								<!--/ li -->
-								<li>
-									<div class="comment-img">
-										<img src="/static/img/users/15.jpg" class="img-responsive img-circle"
-											alt="Image" />
-									</div>
-									<div class="comment-text">
-										<strong><a href="">Vanessa Wells</a></strong>
-										<p>Hello this is a test comment and this comment is particularly very long and
-											it goes on and on and on.</p> <span>on December 5th, 2016</span>
-									</div>
-								</li>
-								<!--/ li -->
-								<li>
-									<div class="comment-img">
-										<img src="/static/img/users/14.jpg" class="img-responsive img-circle"
-											alt="Image" />
-									</div>
-									<div class="comment-text">
-										<strong><a href="">Sean Coleman</a></strong>
-										<p class="">Hello this is a test comment.</p> <span class="date sub-text">on
-											December 5th, 2016</span>
-									</div>
-								</li>
-								<!--/ li -->
-								<li>
-									<div class="comment-img">
-										<img src="/static/img/users/13.jpeg" class="img-responsive img-circle"
-											alt="Image" />
-									</div>
-									<div class="comment-text">
-										<strong><a href="">Anna Morgan</a></strong>
-										<p class="">Hello this is a test comment.</p> <span class="date sub-text">on
-											December 5th, 2016</span>
-									</div>
-								</li>
-								<!--/ li -->
-								<li>
-									<div class="comment-img">
-										<img src="/static/img/users/3.jpg" class="img-responsive img-circle"
-											alt="Image" />
-									</div>
-									<div class="comment-text">
-										<strong><a href="">Allison Fowler</a></strong>
-										<p class="">Hello this is a test comment.</p> <span class="date sub-text">on
-											December 5th, 2016</span>
-									</div>
-								</li>
+								{% endfor %}
 								<!--/ li -->
 							</ul>
 							<!--/ comment-list -->
 
 							<div class="modal-meta-bottom">
 								<ul>
-									<li><a class="modal-like" href="#"><i class="fa fa-heart"></i></a><span
-											class="modal-one"> 786,286</span> |
+									<li><a class="modal-like" href="{% url 'main:like' post.id %}" {% if post|has_liked:request.user %} style="color:#e16a70" {% else %} style="color:#b2b2b2" {% endif %}><i class="fa fa-heart"></i></a><span
+											class="modal-one"> {{ post.like_count }}</span> |
 										<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
-											786,286</span> </li>
+											{{ post.comment_count }}</span> </li>
 									<li>
 										<span class="thumb-xs">
-											<img class="img-responsive img-circle" src="/static/img/users/13.jpeg"
+											{% if request.user.profile.profile_pic %}
+											<img class="img-responsive img-circle" src="{{ request.user.profile.profile_pic.url }}"
 												alt="Image">
+											{% endif %}
 										</span>
-										<div class="comment-body">
+										<form class="comment-body form-group" method="POST" action="{% url 'main:add_comment' %}">
+											{% csrf_token %}
 											<input class="form-control input-sm" type="text"
-												placeholder="Write your comment...">
-										</div>
+												placeholder="Write your comment..." id="comment-input" name="comment_text">
+												<input type="hidden" name="post_id" value="{{ post.id }}" class="post_id">
+											<button type="submit" class="btn form-control btn-sm btn-default">Submit</button>
+										</form>
 										<!--/ comment-body -->
 									</li>
 								</ul>
 							</div>
-							<!--/ modal-meta-bottom -->
 
 						</div>
 						<!--/ modal-meta-top -->

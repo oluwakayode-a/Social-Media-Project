@@ -39,7 +39,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     interests = models.ForeignKey(Interest, on_delete=models.CASCADE, related_name='profile', null=True, blank=True)
-    website = models.URLField(default='www.earthruh.com')
+    website = models.URLField(default='https://www.earthruh.com')
     bio = models.CharField(max_length=170, default="Input Bio Here.")
     verified = models.BooleanField(default=False)
 

@@ -136,8 +136,12 @@
 
                         <li class="dropdown mega-avatar">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <span class="avatar w-32"><img src="{{ request.user.profile.profile_pic.url }}"
-                                        class="img-resonsive img-circle" width="25" height="25" alt="..."></span>
+                                <span class="avatar w-32">
+                                    {% if request.user.profile.profile_pic %}
+                                    <img src="{{ request.user.profile.profile_pic.url }}"
+                                        class="img-resonsive img-circle" width="25" height="25" alt="...">
+                                    {% endif %}
+                                </span>
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                                 <span class="hidden-xs">
                                     {{ request.user.get_full_name }}

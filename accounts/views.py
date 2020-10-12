@@ -4,7 +4,7 @@ from .models import Profile, UserFollowing, Interest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .forms import ProfileForm, InterestForm
-from main.models import Notification
+from main.models import Notification, Post
 
 User = get_user_model()
 
@@ -52,9 +52,11 @@ def unfollow(request, follow_id):
 @login_required
 def profile(request):
     user_profile = Profile.objects.get(user=request.user)
+    posts = Post.objects.filter(user=request.user)
 
     context = {
-        'profile' : user_profile
+        'profile' : user_profile,
+        'posts' : posts
     }
     return render(request, 'accounts/photo_profile.html', context)
 

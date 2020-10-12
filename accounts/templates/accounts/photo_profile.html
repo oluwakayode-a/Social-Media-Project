@@ -1,350 +1,325 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load check_post_liked %}
+{% load check_user_following %}
 {% block content %}
-	 <section class="profile">
-	  <div class="container-fluid">
-	   <div class="row">
-	   
-	   <div class="col-lg-3">
-		 <div class="profilebox hidden-xs hidden-sm" 
-		   style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/4.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">		  
-		 </div>
-		 <div class="profilebox hidden-xs hidden-sm" 
-		   style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/1.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">		  
-		 </div>
-	   </div>
-	   <div class="col-lg-6">
-		 <div class="profilebox-large hidden-xs hidden-sm" 
-		   style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/9.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">		  
-		 </div>
-	   </div>
-	   <div class="col-lg-3">
-		 <div class="profilebox hidden-xs hidden-sm" 
-		   style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/11.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">		  
-		 </div>
-		 <div class="profilebox" 
-		   style="background: linear-gradient( rgba(34,34,34,0.6), rgba(34,34,34,0.6)), url('/static/img/posts/12.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">		  
-		 </div>
-	   </div>
-		
-       </div><!--/ row-->	
-	  </div><!--/ container -->
-	 </section><!--/ profile -->
-  
-	 <!-- ==============================================
-	 User Profile Section
-	 =============================================== --> 
-	 <section class="user-profile">
-	  <div class="container-fluid">
-	   <div class="row">
-	   
-	    <div class="col-lg-12">
-		   <div class="post-content">
-		    <div class="author-post text-center">
-		     <a href="#"><img class="img-fluid img-circle" src="{{ profile.profile_pic.url }}" alt="Image"></a>
-		    </div><!-- /author -->
-		   </div><!-- /.post-content -->		
-		</div><!-- /col-sm-12 -->
-		
-       </div><!--/ row-->	
-	  </div><!--/ container -->
-	 </section><!--/ profile -->
-  
-	 <!-- ==============================================
-	 User Profile Section
-	 =============================================== --> 
-	 <section class="details">
-	  <div class="container">
-	   <div class="row">
-	    <div class="col-lg-12">
-		 
-          <div class="details-box row">
-		   <div class="col-lg-9">
-           <div class="content-box">
-		     <h4>{{ profile.user.get_full_name }} {% if profile.verified %}<i class="fa fa-check"></i>{% endif %}</h4>
-             <p>{{ profile.bio }} <span class="hashtag">#pixels</span></p>
-			 <small><span>{{ profile.website }}</span></small>
-           </div><!--/ media -->
-		   </div> 
-		   <div class="col-lg-3">
-           <div class="follow-box">
-		    <a href="{% url 'accounts:edit_profile' %}" class="kafe-btn kafe-btn-mint"><i class="fa fa-check"></i>Edit Profile</a>
-           </div><!--/ dropdown -->
-		   </div>
-          </div><!--/ details-box -->
-		  
-		</div>
-	   </div>
-	  </div><!--/ container -->
-	 </section><!--/ profile -->
+<section class="profile">
+	<div class="container-fluid">
+		<div class="row">
 
-	 <!-- ==============================================
+			<div class="col-lg-3">
+				<div class="profilebox hidden-xs hidden-sm" style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/4.jpg') no-repeat;
+		          background-size: cover;
+                  background-position: center center;
+                  -webkit-background-size: cover;
+                  -moz-background-size: cover;
+                  -o-background-size: cover;">
+				</div>
+				<div class="profilebox hidden-xs hidden-sm" style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/1.jpg') no-repeat;
+		          background-size: cover;
+                  background-position: center center;
+                  -webkit-background-size: cover;
+                  -moz-background-size: cover;
+                  -o-background-size: cover;">
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="profilebox-large hidden-xs hidden-sm" style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/9.jpg') no-repeat;
+		          background-size: cover;
+                  background-position: center center;
+                  -webkit-background-size: cover;
+                  -moz-background-size: cover;
+                  -o-background-size: cover;">
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="profilebox hidden-xs hidden-sm" style="background: linear-gradient( rgba(34,34,34,0.45), rgba(34,34,34,0.45)), url('/static/img/posts/11.jpg') no-repeat;
+		          background-size: cover;
+                  background-position: center center;
+                  -webkit-background-size: cover;
+                  -moz-background-size: cover;
+                  -o-background-size: cover;">
+				</div>
+				<div class="profilebox" style="background: linear-gradient( rgba(34,34,34,0.6), rgba(34,34,34,0.6)), url('/static/img/posts/12.jpg') no-repeat;
+		          background-size: cover;
+                  background-position: center center;
+                  -webkit-background-size: cover;
+                  -moz-background-size: cover;
+                  -o-background-size: cover;">
+				</div>
+			</div>
+
+		</div>
+		<!--/ row-->
+	</div>
+	<!--/ container -->
+</section>
+<!--/ profile -->
+
+<!-- ==============================================
+	 User Profile Section
+	 =============================================== -->
+<section class="user-profile">
+	<div class="container-fluid">
+		<div class="row">
+
+			<div class="col-lg-12">
+				<div class="post-content">
+					<div class="author-post text-center">
+						{% if profile.profile_pic %}
+						<a href="#"><img class="img-fluid img-circle" src="{{ profile.profile_pic.url }}"
+								alt="Image"></a>
+						{% endif %}
+					</div><!-- /author -->
+				</div><!-- /.post-content -->
+			</div><!-- /col-sm-12 -->
+
+		</div>
+		<!--/ row-->
+	</div>
+	<!--/ container -->
+</section>
+<!--/ profile -->
+
+<!-- ==============================================
+	 User Profile Section
+	 =============================================== -->
+<section class="details">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+
+				<div class="details-box row">
+					<div class="col-lg-9">
+						<div class="content-box">
+							<h4>{{ profile.user.get_full_name }} {% if profile.verified %}<i
+									class="fa fa-check"></i>{% endif %}</h4>
+							<p>{{ profile.bio }} <span class="hashtag">#pixels</span></p>
+							<small><span>{{ profile.website }}</span></small>
+						</div>
+						<!--/ media -->
+					</div>
+					<div class="col-lg-3">
+						<div class="follow-box">
+							<a href="{% url 'accounts:edit_profile' %}" class="kafe-btn kafe-btn-mint"><i
+									class="fa fa-check"></i>Edit Profile</a>
+						</div>
+						<!--/ dropdown -->
+					</div>
+				</div>
+				<!--/ details-box -->
+
+			</div>
+		</div>
+	</div>
+	<!--/ container -->
+</section>
+<!--/ profile -->
+
+<!-- ==============================================
 	 Home Menu Section
-	 =============================================== -->	
-     <section class="home-menu">
-      <div class="container">
-       <div class="row">
+	 =============================================== -->
+<section class="home-menu">
+	<div class="container">
+		<div class="row">
 
-        <div class="menu-category">
-         <ul class="menu">
-          <li class="current-menu-item"><a href="photo_profile.html">Posts <span>1.7k</span></a></li>
-          <li><a href="photo_followers.html">Followers <span>{{ profile.user.followers.all | length }}</span></a></li>
-          <li><a href="photo_followers.html">Following <span>{{ profile.user.following.all | length }}</span></a></li>
-         </ul>
+			<div class="menu-category">
+				<ul class="menu">
+					<li class="current-menu-item"><a href="photo_profile.html">Posts <span>{{ posts | length }}</span></a></li>
+					<li><a href="photo_followers.html">Followers
+							<span>{{ profile.user.followers.all | length }}</span></a></li>
+					<li><a href="photo_followers.html">Following
+							<span>{{ profile.user.following.all | length }}</span></a></li>
+				</ul>
+			</div>
+
 		</div>
-		
-	   </div><!--/row -->
-      </div><!--/container -->
-     </section><!--/home-menu -->	
+		<!--/row -->
+	</div>
+	<!--/container -->
+</section>
+<!--/home-menu -->
 
-	 <!-- ==============================================
-	 News Feed Section
-	 =============================================== --> 
-	 <section class="newsfeed">
-	  <div class="container">
-	  
-	   <div class="row">
-	   
-	    <div class="col-lg-4">
-		 <a href="#myModal" data-toggle="modal">
-		 <div class="explorebox" 
-		   style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('/static/img/posts/14.jpg') no-repeat;
+<section class="newsfeed">
+	<div class="container">
+
+		<div class="row top-row">
+			{% for user in suggested %}
+			<div class="col-lg-3">
+				<div class="tr-section">
+					<div class="tr-post">
+						<div class="entry-header">
+							<div class="entry-thumbnail">
+								<a href="#"><img class="img-fluid" src="/static/img/posts/30.jpg" alt="Image"></a>
+							</div><!-- /entry-thumbnail -->
+						</div><!-- /entry-header -->
+						<div class="post-content">
+							<div class="author-post text-center">
+								{% if user.profile.profile_pic %}
+								<a href="#"><img class="img-fluid rounded-circle"
+										src="{{ user.profile.profile_pic.url }}" alt="Image"></a>
+								{% endif %}
+							</div><!-- /author -->
+							<div class="card-content">
+								<h4>{{ user.get_full_name }}</h4>
+								<span>@{{ user.username }}</span>
+							</div>
+							<a href="{% url 'accounts:follow' user.id %}"
+								class="kafe-btn kafe-btn-mint-small full-width"> Follow
+							</a>
+						</div><!-- /.post-content -->
+					</div><!-- /.tr-post -->
+				</div><!-- /.tr-post -->
+			</div><!-- /col-sm-3 -->
+			{% endfor %}
+
+		</div>
+
+		<div class="row">
+			{% for post in posts %}
+			<div class="col-lg-4">
+				<a href="#myModal{{ post.id }}" data-toggle="modal">
+					<div class="explorebox" style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('{{ post.image.url }}') no-repeat;
 		          background-size: cover;
                   background-position: center center;
                   -webkit-background-size: cover;
                   -moz-background-size: cover;
                   -o-background-size: cover;">
-		  <div class="explore-top">
-		   <div class="explore-like"><i class="fa fa-heart"></i> <span>14,100</span></div>
-		   <div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
-          </div>		  
-		 </div>
-		 </a>
-		</div><!--/ col-lg-4 -->
-	   
-	    <div class="col-lg-4">
-		 <a href="#myModal" data-toggle="modal">
-		 <div class="explorebox" 
-		   style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('/static/img/posts/18.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">
-		  <div class="explore-top">
-		   <div class="explore-like"><i class="fa fa-heart"></i> <span>100,100</span></div>
-		   <div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
-          </div>			  
-		 </div>
-		 </a>
-		</div><!--/ col-lg-4 -->
-	   
-	    <div class="col-lg-4">
-		 <a href="#myModal" data-toggle="modal">
-		 <div class="explorebox" 
-		   style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('/static/img/posts/15.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">
-		  <div class="explore-top">
-		   <div class="explore-like"><i class="fa fa-heart"></i> <span>100</span></div>
-		   <div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
-          </div>		  
-		 </div>
-		 </a>
-		</div><!--/ col-lg-4 -->
-		
-	   </div><!--/ row -->
-	   
-	   <div class="row">
-	   
-	    <div class="col-lg-4">
-		 <a href="#myModal" data-toggle="modal">
-		 <div class="explorebox" 
-		   style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('/static/img/posts/25.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">
-		  <div class="explore-top">
-		   <div class="explore-like"><i class="fa fa-heart"></i> <span>324</span></div>
-		   <div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
-          </div>		  
-		 </div>
-		 </a>
-		</div><!--/ col-lg-4 -->
-	   
-	    <div class="col-lg-4">
-		 <a href="#myModal" data-toggle="modal">
-		 <div class="explorebox" 
-		   style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('/static/img/posts/36.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">
-		  <div class="explore-top">
-		   <div class="explore-like"><i class="fa fa-heart"></i> <span>1023</span></div>
-		   <div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
-          </div>			  
-		 </div>
-		 </a>
-		</div><!--/ col-lg-4 -->
-	   
-	    <div class="col-lg-4">
-		 <a href="#myModal" data-toggle="modal">
-		 <div class="explorebox" 
-		   style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('/static/img/posts/26.jpg') no-repeat;
-		          background-size: cover;
-                  background-position: center center;
-                  -webkit-background-size: cover;
-                  -moz-background-size: cover;
-                  -o-background-size: cover;">
-		  <div class="explore-top">
-		   <div class="explore-like"><i class="fa fa-heart"></i> <span>40</span></div>
-		   <div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
-          </div>		  
-		 </div>
-		 </a>
-		</div><!--/ col-lg-4 -->
-		
-	   </div><!--/ row -->
-	   
-	  </div><!--/ container -->
-	 </section><!--/ newsfeed -->
-  
-	 <!-- ==============================================
+						<div class="explore-top">
+							<div class="explore-like"><i class="fa fa-heart"></i> <span>{{ post.like_count }}</span>
+							</div>
+							<div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
+						</div>
+						<div class="explore-body">
+							<div class=""><img class="img-circle" src="{{ post.user.profile.profile_pic.url }}"
+									alt="user"></div>
+						</div>
+					</div>
+				</a>
+			</div>
+			<!--/ col-lg-4 -->
+			{% endfor %}
+		</div>
+		<!--/ row -->
+
+	</div>
+	<!--/ container -->
+</section>
+<!--/ newsfeed -->
+
+<!-- ==============================================
 	 Modal Section
 	 =============================================== -->
-     <div id="myModal" class="modal fade">
-      <div class="modal-dialog">
-       <div class="modal-content">
-        <div class="modal-body">
-		
-         <div class="row">
-		 
-          <div class="col-md-8 modal-image">
-           <img class="img-responsive" src="/static/img/posts/15.jpg" alt="Image"/>
-          </div><!--/ col-md-8 -->
-          <div class="col-md-4 modal-meta">
-           <div class="modal-meta-top">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-			 <span aria-hidden="true">×</span><span class="sr-only">Close</span>
-			</button><!--/ button -->
-            <div class="img-poster clearfix">
-             <a href=""><img class="img-responsive img-circle" src="/static/img/users/18.jpg" alt="Image"/></a>
-             <strong><a href="">Benjamin</a></strong>
-             <span>12 minutes ago</span><br/>
-		     <a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i> Following</a>
-            </div><!--/ img-poster -->
-			  
-            <ul class="img-comment-list">
-             <li>
-              <div class="comment-img">
-               <img src="/static/img/users/17.jpeg" class="img-responsive img-circle" alt="Image"/>
-              </div>
-              <div class="comment-text">
-               <strong><a href="">Anthony McCartney</a></strong>
-               <p>Hello this is a test comment.</p> <span class="date sub-text">on December 5th, 2016</span>
-              </div>
-             </li><!--/ li -->
-             <li>
-              <div class="comment-img">
-               <img src="/static/img/users/15.jpg" class="img-responsive img-circle" alt="Image"/>
-              </div>
-              <div class="comment-text">
-               <strong><a href="">Vanessa Wells</a></strong>
-               <p>Hello this is a test comment and this comment is particularly very long and it goes on and on and on.</p> <span>on December 5th, 2016</span>
-              </div>
-             </li><!--/ li -->
-             <li>
-              <div class="comment-img">
-               <img src="/static/img/users/14.jpg" class="img-responsive img-circle" alt="Image"/>
-              </div>
-              <div class="comment-text">
-               <strong><a href="">Sean Coleman</a></strong>
-               <p class="">Hello this is a test comment.</p> <span class="date sub-text">on December 5th, 2016</span>
-              </div>
-             </li><!--/ li -->
-             <li>
-              <div class="comment-img">
-               <img src="/static/img/users/13.jpeg" class="img-responsive img-circle" alt="Image"/>
-              </div>
-              <div class="comment-text">
-               <strong><a href="">Anna Morgan</a></strong>
-               <p class="">Hello this is a test comment.</p> <span class="date sub-text">on December 5th, 2016</span>
-              </div>
-             </li><!--/ li -->
-             <li>
-              <div class="comment-img">
-               <img src="/static/img/users/3.jpg" class="img-responsive img-circle" alt="Image"/>
-              </div>
-              <div class="comment-text">
-               <strong><a href="">Allison Fowler</a></strong>
-               <p class="">Hello this is a test comment.</p> <span class="date sub-text">on December 5th, 2016</span>
-              </div>
-             </li><!--/ li -->
-            </ul><!--/ comment-list -->
-			  
-            <div class="modal-meta-bottom">
-			 <ul>
-			  <li><a class="modal-like" href="#"><i class="fa fa-heart"></i></a><span class="modal-one"> 786,286</span> | 
-			      <a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span> 786,286</span> </li>
-			  <li>
-			   <span class="thumb-xs">
-				<img class="img-responsive img-circle" src="/static/img/users/13.jpeg" alt="...">
-			   </span>
-			   <div class="comment-body">
-				 <input class="form-control input-sm" type="text" placeholder="Write your comment...">
-			   </div><!--/ comment-body -->	
-              </li>				
-             </ul>				
-            </div><!--/ modal-meta-bottom -->
-			  
-           </div><!--/ modal-meta-top -->
-          </div><!--/ col-md-4 -->
-		  
-         </div><!--/ row -->
-        </div><!--/ modal-body -->
-		
-       </div><!--/ modal-content -->
-      </div><!--/ modal-dialog -->
-     </div><!--/ modal -->	 
-	   
+{% for post in posts %}
+<div id="myModal{{ post.id }}" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+
+				<div class="row">
+
+					<div class="col-md-8 modal-image">
+						<img class="img-responsive" src="{{ post.image.url }}" alt="Image" />
+					</div>
+					<!--/ col-md-8 -->
+					<div class="col-md-4 modal-meta">
+						<div class="modal-meta-top">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+							</button>
+							<!--/ button -->
+							<div class="img-poster clearfix">
+								{% if post.user.profile.profile_pic %}
+								<a href=""><img class="img-responsive img-circle" src="/static/img/users/18.jpg"
+										alt="Image" /></a>
+								{% endif %}
+								<strong><a href="">{{ post.user.get_full_name }}</a></strong>
+								<span>{{ post.created | timesince }} ago</span><br />
+								{% is_following request.user post.user.id as user_is_following %}
+
+								{% if user_is_following  %}
+								<a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i>
+									Following</a>
+								{% else %}
+								<a href="{% url 'accounts:follow' post.user.id %}" class="kafe kafe-btn-mint-small"><i
+										class="fa fa-plus"></i> Follow</a>
+								{% endif %}
+							</div>
+							<!--/ img-poster -->
+
+							<ul class="img-comment-list">
+								{% for comment in post.comments.all %}
+								<li>
+									<div class="comment-img">
+										{% if comment.user.profile.profile_pic. %}
+										<img src="{{ comment.user.profile.profile_pic.url }}"
+											class="img-responsive img-circle" alt="Image" />
+										{% endif %}
+									</div>
+									<div class="comment-text">
+										<strong><a href="">{{ comment.user.get_full_name }}</a></strong>
+										<p>{{ comment.text }}</p> <span class="date sub-text">on
+											{{ comment.created }}</span>
+									</div>
+								</li>
+								{% endfor %}
+								<!--/ li -->
+							</ul>
+							<!--/ comment-list -->
+
+							<div class="modal-meta-bottom">
+								<ul>
+									<li><a class="modal-like" href="{% url 'main:like' post.id %}"
+											{% if post|has_liked:request.user %} style="color:#e16a70" {% else %}
+											style="color:#b2b2b2" {% endif %}><i class="fa fa-heart"></i></a><span
+											class="modal-one"> {{ post.like_count }}</span> |
+										<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
+											{{ post.comment_count }}</span> </li>
+									<li>
+										<span class="thumb-xs">
+											{% if request.user.profile.profile_pic %}
+											<img class="img-responsive img-circle"
+												src="{{ request.user.profile.profile_pic.url }}" alt="Image">
+											{% endif %}
+										</span>
+										<form class="comment-body form-group" method="POST"
+											action="{% url 'main:add_comment' %}">
+											{% csrf_token %}
+											<input class="form-control input-sm" type="text"
+												placeholder="Write your comment..." id="comment-input"
+												name="comment_text">
+											<input type="hidden" name="post_id" value="{{ post.id }}" class="post_id">
+											<button type="submit"
+												class="btn form-control btn-sm btn-default">Submit</button>
+										</form>
+										<!--/ comment-body -->
+									</li>
+								</ul>
+							</div>
+
+						</div>
+						<!--/ modal-meta-top -->
+					</div>
+					<!--/ col-md-4 -->
+
+				</div>
+				<!--/ row -->
+			</div>
+			<!--/ modal-body -->
+
+		</div>
+		<!--/ modal-content -->
+	</div>
+	<!--/ modal-dialog -->
+</div>
+{% endfor %}
+
 {% endblock %}
 
 {% block extra_scripts %}
-	<script>
-		let el = $('#profile');
-		el.removeClass('dark-black');
-		el.addClass('mint-green')
-	</script>
+<script>
+	let el = $('#profile');
+	el.removeClass('dark-black');
+	el.addClass('mint-green')
+</script>
 {% endblock extra_scripts %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from accounts.models import Profile, UserFollowing
 from .models import Post, Like, Comment, Notification
@@ -50,7 +50,7 @@ def add_comment(request):
             )
             new_notification.save()
 
-        return redirect('main:index')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -75,7 +75,7 @@ def like_toggle(request, post_id):
         )
         new_notification.save()
 
-    return redirect('main:index')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required

@@ -28,6 +28,7 @@ class Post(models.Model):
         return True if self.likes.filter(user=user).exists() else False
 
 
+
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_user')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
