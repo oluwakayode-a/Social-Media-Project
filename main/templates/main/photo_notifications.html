@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<!-- ==============================================
+	 News Feed Section
+	 =============================================== -->
+<section class="notifications">
+	<div class="container">
+		<div class="row">
+
+			<div class="col-lg-8 col-lg-offset-2">
+				<ul>
+					{% for notification in notifications %}
+					<li>
+						<div class="media first_child">
+							<!-- <img src="assets/img/users/1.jpg" alt="" class="img-responsive img-circle"> -->
+							<div class="media_body">
+								<p>{{ notification.text }}</p>
+								<h6>{{ notification.created | timesince }} ago</h6>
+								<!-- <div class="btn_group">
+									<a class="kafe-btn kafe-btn-mint"><i class="fa fa-check"></i></a>
+									<a class="kafe-btn kafe-btn-red"><i class="fa fa-times"></i></a>
+								</div> -->
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+
+				
+				</ul>
+
+			</div>
+
+		</div>
+		<!--/ row-->
+	</div>
+	<!--/ container -->
+</section>
+<!--/ profile -->
+
+{% endblock %}

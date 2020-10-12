@@ -125,10 +125,10 @@
 
 			<div class="menu-category">
 				<ul class="menu">
-					<li class="current-menu-item"><a href="photo_profile.html">Posts <span>{{ posts | length }}</span></a></li>
-					<li><a href="photo_followers.html">Followers
+					<li class="current-menu-item"><a>Posts <span>{{ posts | length }}</span></a></li>
+					<li><a href="{% url 'accounts:followers' %}">Followers
 							<span>{{ profile.user.followers.all | length }}</span></a></li>
-					<li><a href="photo_followers.html">Following
+					<li><a href="{% url 'accounts:following' %}">Following
 							<span>{{ profile.user.following.all | length }}</span></a></li>
 				</ul>
 			</div>
@@ -142,39 +142,6 @@
 
 <section class="newsfeed">
 	<div class="container">
-
-		<div class="row top-row">
-			{% for user in suggested %}
-			<div class="col-lg-3">
-				<div class="tr-section">
-					<div class="tr-post">
-						<div class="entry-header">
-							<div class="entry-thumbnail">
-								<a href="#"><img class="img-fluid" src="/static/img/posts/30.jpg" alt="Image"></a>
-							</div><!-- /entry-thumbnail -->
-						</div><!-- /entry-header -->
-						<div class="post-content">
-							<div class="author-post text-center">
-								{% if user.profile.profile_pic %}
-								<a href="#"><img class="img-fluid rounded-circle"
-										src="{{ user.profile.profile_pic.url }}" alt="Image"></a>
-								{% endif %}
-							</div><!-- /author -->
-							<div class="card-content">
-								<h4>{{ user.get_full_name }}</h4>
-								<span>@{{ user.username }}</span>
-							</div>
-							<a href="{% url 'accounts:follow' user.id %}"
-								class="kafe-btn kafe-btn-mint-small full-width"> Follow
-							</a>
-						</div><!-- /.post-content -->
-					</div><!-- /.tr-post -->
-				</div><!-- /.tr-post -->
-			</div><!-- /col-sm-3 -->
-			{% endfor %}
-
-		</div>
-
 		<div class="row">
 			{% for post in posts %}
 			<div class="col-lg-4">
@@ -191,8 +158,10 @@
 							<div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
 						</div>
 						<div class="explore-body">
+							{% if post.user.profile.profile_pic %}
 							<div class=""><img class="img-circle" src="{{ post.user.profile.profile_pic.url }}"
 									alt="user"></div>
+							{% endif %}
 						</div>
 					</div>
 				</a>
@@ -230,20 +199,12 @@
 							<!--/ button -->
 							<div class="img-poster clearfix">
 								{% if post.user.profile.profile_pic %}
-								<a href=""><img class="img-responsive img-circle" src="/static/img/users/18.jpg"
+								<a href=""><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
 										alt="Image" /></a>
 								{% endif %}
 								<strong><a href="">{{ post.user.get_full_name }}</a></strong>
 								<span>{{ post.created | timesince }} ago</span><br />
-								{% is_following request.user post.user.id as user_is_following %}
-
-								{% if user_is_following  %}
-								<a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i>
-									Following</a>
-								{% else %}
-								<a href="{% url 'accounts:follow' post.user.id %}" class="kafe kafe-btn-mint-small"><i
-										class="fa fa-plus"></i> Follow</a>
-								{% endif %}
+								
 							</div>
 							<!--/ img-poster -->
 

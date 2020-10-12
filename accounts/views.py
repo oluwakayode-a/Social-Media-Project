@@ -41,12 +41,12 @@ def follow(request, target_id):
 
 
 @login_required
-def unfollow(request, follow_id):
+def unfollow(request, target_id):
     # To unfollow, simply delete the following entry
-    get_following = UserFollowing.objects.get(id=follow_id)
+    get_following = UserFollowing.objects.get(user_id=request.user.id, following_user_id=target_id)
     get_following.delete()
 
-    return HttpResponse('successful')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -68,7 +68,7 @@ def edit_profile(request):
     if form.is_valid():
         form.save()
 
-        return redirect('/profile')
+        return redirect('main:index')
     context = {
         'form' : form
     }
@@ -88,6 +88,32 @@ def edit_interests(request):
         'form' : form
     }
     return render(request, 'accounts/interests.html', context)
+
+
+@login_required
+def followers(request):
+    # isolate all user ids of users following currently logged in user
+    excluded = [user.user_id.id for user in request.user.followers.all()]
+
+    # list all users following logged in user.
+    followers = User.objects.filter(id__in=excluded).exclude(username=request.user.username)
+    context = {
+        'followers' : followers
+    }
+    return render(request, 'accounts/photo_followers.html', context)
+
+
+@login_required
+def following(request):
+    # isolate all user ids of users followed by currently logged in user
+    excluded = [user.following_user_id.id for user in request.user.following.all()]
+
+    # list all users followed by logged in user.
+    following = User.objects.filter(id__in=excluded).exclude(username=request.user.username)
+    context = {
+        'following' : following
+    }
+    return render(request, 'accounts/photo_following.html', context)
 
 
     

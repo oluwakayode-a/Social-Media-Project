@@ -17,7 +17,7 @@ def index(request):
     # list all users not followed by logged in user.
     suggested = User.objects.exclude(id__in=excluded).exclude(username=request.user.username)
     
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-created')
 
     context = {
         'suggested' : suggested,
@@ -110,3 +110,11 @@ def explore(request):
     }
 
     return render(request, 'main/photo_explore.html', context)
+
+@login_required
+def notifications(request):
+    notifications = request.user.notifications.all()
+    context = {
+        'notifications':notifications
+    }
+    return render(request, 'main/photo_notifications.html', context)
