@@ -54,7 +54,7 @@ class UserFollowing(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("user_id", "following_user_id")
+        unique_together = [["user_id", "following_user_id"]]
         ordering = ["-created"]
 
     def __str__(self):
