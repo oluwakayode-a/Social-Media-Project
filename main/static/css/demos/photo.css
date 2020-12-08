@@ -640,7 +640,6 @@ a.navbar-brand:hover {
 
 .m-0 {
     margin: 0 !important;
-   
 }
 .media {
   display: -ms-flexbox;
@@ -723,16 +722,11 @@ a.navbar-brand:hover {
   font-size: 0px;	
   text-align: center;
 }
-.cardbox-like li:first-child {
+.cardbox-like li {
+  list-style: none;
   display: inline-block;
-  margin-right: 5px;
-  padding-right: 20px;
-  border-right: 2px solid #f4f4f4;
-}
-.cardbox-like li:last-child {
-  display: inline-block;
-  text-align: center;
-  margin-left: 15px;
+  margin: 0px 10px 0px 0px !important;
+  padding: 0px 10px 0px 0px !important;
 }
 .cardbox-like li a {
   color: #e16a70;
@@ -1415,7 +1409,6 @@ a.navbar-brand:hover {
   margin-bottom: 5px;
   z-index: 1;
   float: center !important;
-   
 }	
 .user-profile .post-content .author-post img {
   width: 200px;
@@ -1429,7 +1422,7 @@ a.navbar-brand:hover {
 }
 .details .details-box{
   background: #fff;
-  padding: 60px;  
+  padding: 15px;  
 }
 .details .content-box h4{
   font-family: 'Abhaya Libre', serif;
@@ -2359,9 +2352,4 @@ a.navbar-brand:hover {
 	  height: 130vh;
 	  width: 100%;
 	}
-}
-.m-1 {
-    margin: 0 !important;
-    position: relative;
-  left: 150px;
 }

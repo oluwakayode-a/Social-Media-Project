@@ -3,6 +3,7 @@ from multiselectfield import MultiSelectField
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import main.models
 
 # Create your models here.
 class User(AbstractUser):
@@ -35,9 +36,17 @@ class Interest(models.Model):
 
 
 
+
 class Profile(models.Model):
+    GENDERS = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('prefer_not_to_say', 'Prefer not to say')
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    gender = models.CharField(max_length=20, choices=GENDERS, default='------')
+    date_of_birth = models.DateField()
     interests = models.ForeignKey(Interest, on_delete=models.CASCADE, related_name='profile', null=True, blank=True)
     website = models.URLField(default='https://www.earthruh.com')
     bio = models.CharField(max_length=170, default="Input Bio Here.")

@@ -1,11 +1,11 @@
 from django import forms
 from allauth.account.forms import SignupForm
-from .models import Profile, Interest
+from .models import Profile, Interest, User
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('profile_pic', 'website', 'bio')
+        exclude = ['user', 'interests']
 
 
 class InterestForm(forms.ModelForm):
@@ -21,4 +21,10 @@ class CustomSignupForm(SignupForm):
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
         user.save()
-        return user 
+        return user
+
+
+class EditUser(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name')

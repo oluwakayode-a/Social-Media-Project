@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Profile, UserFollowing, Interest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .forms import ProfileForm, InterestForm
+from .forms import ProfileForm, InterestForm, EditUser
 from main.models import Notification, Post
 
 User = get_user_model()
@@ -23,19 +23,25 @@ def users_list(request):
 @login_required
 def follow(request, target_id):
     user_to_follow = User.objects.get(id=target_id)
-    new_follow = UserFollowing.objects.create(
-        user_id=request.user,
-        following_user_id=user_to_follow
-    )
-    new_follow.save()
 
-    # create new notification
-    new_notification = Notification.objects.create(
-        user=user_to_follow,
-        notification_type='user-plus',
-        text=f'{request.user.get_full_name()} followed you'
-    )
-    new_notification.save()
+    # prevent user from following him/herself
+    if user_to_follow == request.user:
+        raise ValueError("You can't follow yourself.")
+    else:
+        new_follow = UserFollowing.objects.create(
+            user_id=request.user,
+            following_user_id=user_to_follow
+        )
+        new_follow.save()
+
+        # create new notification
+        new_notification = Notification.objects.create(
+            user=user_to_follow,
+            user_from=request.user,
+            notification_type='user-plus',
+            text=f'{request.user.get_full_name()} followed you'
+        )
+        new_notification.save()
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -62,15 +68,35 @@ def profile(request):
 
 
 @login_required
+def user(request, user):
+    user = User.objects.get(username=user)
+    if user == request.user:
+        return redirect('accounts:profile')
+    
+    # Profile of other users
+    profile = Profile.objects.get(user=user)
+    posts = Post.objects.filter(user=user)
+
+    context = {
+        'profile' : profile,
+        'posts' : posts
+    }
+    return render(request, 'accounts/photo_profile.html', context)
+
+
+@login_required
 def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
-    form = ProfileForm(request.POST or None, request.FILES or None, instance=profile)
-    if form.is_valid():
-        form.save()
+    user_form = EditUser(request.POST or None, instance=request.user)
+    profile_form = ProfileForm(request.POST or None, request.FILES or None, instance=profile)
 
+    if user_form.is_valid() and profile_form.is_valid:
+        user_form.save()
+        profile_form.save()
         return redirect('main:index')
     context = {
-        'form' : form
+        'user_form' : user_form,
+        'profile_form' : profile_form
     }
     return render(request, 'accounts/edit_profile.html', context)
 

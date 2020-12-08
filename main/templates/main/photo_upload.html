@@ -12,144 +12,113 @@
 				<div class="box">
 					<form method="POST" enctype="multipart/form-data">
 						{% csrf_token %}
-						<textarea class="form-control no-border" rows="3" placeholder="Photo caption..." name="caption"></textarea>
+						<textarea class="form-control no-border" rows="3" placeholder="Photo caption..."
+							name="caption" required></textarea>
 						<div class="box-footer clearfix">
 							<ul class="nav nav-pills nav-sm">
 								<label for="file-input">
-									<input type="file" class="form-control" name="file-input" id="file-input" accept="image/*">
+									<input type="file" class="form-control" name="file-input" id="file-input"
+										accept="image/*" required>
 								</label>
-								
+
 								<!-- <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-video text-muted"></i></a>
 								</li> -->
 							</ul>
 						</div>
-						<button class="kafe-btn kafe-btn-mint-small pull-right btn-sm" style="position: absolute; right: 10px; top: 86px;">Upload</button>
+
+						<div style="padding: 10px;">
+							<label class="EventS" for="Event">Event</label>
+							<label name="Event" class="switch">
+								<input type="checkbox" onclick="eventAction()" id="eswitch" name="event-check"><span
+									class="slider round"></span></label>
+							<div id="EventInfo" style="display: none;">
+								<label class="EventUrl" for="url-type-styled-input">Event URL<span class="aux"></span></label>
+								<input type="url" id="url-type-styled-input" name="event-url">
+	
+								<label for="vname">Venue</label>
+								<input class="Venue" type="text" id="venue" name="venue" placeholder="Your Venue..">
+	
+							</div>
+						</div>
+
+						<div style="padding: 10px;">
+							<button type="submit" class="kafe-btn kafe-btn-mint">Upload</button>
+						</div>
 					</form>
 				</div>
 
 			</div>
 		</div>
 
-		<!-- <div class="row one-row">
-			<div class="col-lg-12">
-				<a href="https://picturepan2.github.io/instagram.css/" target="_blank">
-					<h4>Instagram Filters from Picture Pan 2</h4>
-				</a>
-			</div>
-		</div> -->
+		<style>
+			.switch {
+				position: relative;
+				display: inline-block;
+				width: 60px;
+				height: 34px;
+				margin: 10px
+			}
 
-		<!-- <div class="row">
+			.switch input {
+				opacity: 0;
+				width: 0;
+				height: 0;
+			}
 
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span>Normal</span>
-					</div>
-				</div>
-			</div>
+			.slider {
+				position: absolute;
+				cursor: pointer;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #ccc;
+				-webkit-transition: .4s;
+				transition: .4s;
+			}
 
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-1977">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">1977</span>
-					</div>
-				</div>
-			</div>
 
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-willow">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">Willow</span>
-					</div>
-				</div>
-			</div>
+			.slider:before {
+				position: absolute;
+				content: "";
+				height: 26px;
+				width: 26px;
+				left: 4px;
+				bottom: 4px;
+				background-color: white;
+				-webkit-transition: .4s;
+				transition: .4s;
+			}
 
-		</div> -->
-		<!--/ row-->
+			input:checked+.slider {
+				background-color: #2196F3;
+			}
 
-		<!-- <div class="row">
+			input:focus+.slider {
+				box-shadow: 0 0 1px #2196F3;
+			}
 
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-sutro">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">Sutro</span>
-					</div>
-				</div>
-			</div>
+			input:checked+.slider:before {
+				-webkit-transform: translateX(26px);
+				-ms-transform: translateX(26px);
+				transform: translateX(26px);
+			}
 
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-reyes">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">Reyes</span>
-					</div>
-				</div>
-			</div>
+			/* Rounded sliders */
+			.slider.round {
+				border-radius: 34px;
+			}
 
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-poprocket">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">Poprocket</span>
-					</div>
-				</div>
-			</div>
+			.slider.round:before {
+				border-radius: 50%;
+			}
+		</style>
 
-		</div> -->
-		<!--/ row-->
+		<!-- Rounded switch -->
 
-		<!-- <div class="row">
 
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-inkwell">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">Inkwell</span>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-nashville">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">Nashville</span>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-				<div class="card">
-					<div class="card-image filter-moon">
-						<img src="/static/img/posts/18.jpg" class="img-responsive" alt="Image" />
-					</div>
-					<div class="card-header">
-						<span class="h6">Moon</span>
-					</div>
-				</div>
-			</div>
-
-		</div> -->
+		<!--        <h5>Event</h5>-->
+		
 
 
 	</div>
@@ -157,4 +126,89 @@
 </section>
 <!--/ newsfeed -->
 
+<style>
+	.Venue[type=text],
+	select {
+		width: 100%;
+		padding: 12px 20px;
+		margin: 8px 0;
+		display: inline-block;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-sizing: border-box;
+	}
+
+	.EventUrl {
+		width: 10px;
+		display: block;
+		white-space: nowrap;
+	}
+
+	* {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	/*
+	body {
+	   font-size: 100%;
+	   -webkit-text-size-adjust: 100%;
+	}
+	*/
+	label {
+		font-size: 1.25em;
+		color: #222;
+	}
+
+	label .aux {
+		font-weight: 300;
+		float: right;
+	}
+
+	input[type="url"] {
+		font-size: 1.5em;
+		width: 100%;
+		padding: 0.25em 0.375em;
+		margin: 0.375em 0 1.25em 0;
+		background-color: #fdfdfd;
+		border: 0.0625em solid;
+		border-color: #ccc;
+		box-shadow: inset 0 0.0625em 0.125em rgba(0, 0, 0, .2);
+		opacity: .75;
+	}
+
+	input[type="url"]:focus {
+		outline: none;
+		background-color: #fff;
+		border-color: rgba(28, 126, 194, .8);
+		box-shadow: inset 0 0.0625em 0.125em rgba(0, 0, 0, .2), 0 0 0.125em rgba(28, 126, 194, .8);
+		opacity: 1;
+	}
+
+	#url-type-styled-input:invalid {
+		border-color: rgba(203, 0, 2, .8);
+		box-shadow: inset 0 0.0625em 0.125em rgba(0, 0, 0, .2), 0 0 0.125em rgba(203, 0, 2, .8);
+	}
+</style>
 {% endblock %}
+
+
+{% block extra_scripts %}
+<script>
+	function eventAction() {    
+		var x = document.getElementById("EventInfo");
+		let eventURL = $('#url-type-styled-input')
+		let venue = $('#venue')
+		if (x.style.display === "none") {
+			x.style.display = "block";
+			eventURL.prop('required', true)
+			venue.prop('required', true)
+		} else {
+			x.style.display = "none";
+			eventURL.prop('required', false)
+			venue.prop('required', false)
+		}
+	}
+</script>
+{% endblock extra_scripts %}

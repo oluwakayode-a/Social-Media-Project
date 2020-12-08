@@ -3,7 +3,9 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from accounts.models import Profile, UserFollowing
 from .models import Post, Like, Comment, Notification
+from .forms import SuggestionForm
 from django.contrib.auth.decorators import login_required
+import json
 
 
 User = get_user_model()
@@ -25,36 +27,60 @@ def index(request):
     }
     return render(request, 'main/photo_home.html', context)
 
+
+@login_required
+def category(request, category):
+    # isolate all user ids of users followed by currently logged in user
+    excluded = [user.following_user_id.id for user in request.user.following.all()]
+
+    # list all users not followed by logged in user.
+    suggested = User.objects.exclude(id__in=excluded).exclude(username=request.user.username)
+    posts = Post.objects.filter(category=category).order_by('-created')
+
+    context = {
+        'suggested' : suggested,
+        'posts' : posts
+    }
+    return render(request, 'main/category.html', context)
+
+
 @login_required
 def add_comment(request):
-    if request.method == 'POST':
-        comment_text = request.POST['comment_text']
-        post_id = request.POST['post_id']
+    data = json.loads(request.body)
+    post_id = data['post_id']
+    
+    comment_text = data['comment_text']
 
-        post = Post.objects.get(id=post_id)
+    post = Post.objects.get(id=post_id)
 
-        new_comment = Comment.objects.create(
-            user=request.user,
+    new_comment = Comment.objects.create(
+        user=request.user,
+        post=post,
+        text=comment_text
+    )
+    new_comment.save()
+    
+    # create notification for all users except logged in user
+    users = User.objects.exclude(username=request.user.username)
+    for user in users:
+        new_notification = Notification.objects.create(
+            user=user,
+            user_from=request.user,
             post=post,
-            text=comment_text
+            text=f"{request.user.get_full_name()} commented on {post.user.get_full_name()}'s post",
+            notification_type='comment'
         )
-        new_comment.save()
-        
-        # create notification for all users except logged in user
-        users = User.objects.exclude(username=request.user.username)
-        for user in users:
-            new_notification = Notification.objects.create(
-                user=user,
-                text=f"{request.user.get_full_name()} commented on {post.user.get_full_name()}'s post",
-                notification_type='comment'
-            )
-            new_notification.save()
+        new_notification.save()
 
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    response = {'success' : True}
 
+    return JsonResponse(response)
 
 @login_required
-def like_toggle(request, post_id):
+def like_toggle(request):
+    data = json.loads(request.body)
+    post_id = data['post_id']
+
     post = Post.objects.get(id=post_id)
     # check if user has liked post
     if post.is_liked_by_user(request.user):
@@ -70,12 +96,16 @@ def like_toggle(request, post_id):
          # create new notification
         new_notification = Notification.objects.create(
             user=post.user,
+            user_from=request.user,
+            post=post,
             notification_type='heart',
             text=f'{request.user.get_full_name()} liked your post'
         )
         new_notification.save()
+    
+    response = {'success' : True}
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return JsonResponse(response)
 
 
 @login_required
@@ -84,13 +114,32 @@ def upload(request):
         caption = request.POST['caption']
         image = request.FILES['file-input']
 
-        new_post = Post.objects.create(
-            caption=caption,
-            image=image,
-            user=request.user
-        )
-        new_post.save()
-
+        event = None
+        event_url = None
+        try:
+            event = request.POST['event-check']
+            event_url = request.POST['event-url']
+            venue = request.POST['venue']
+        except:
+            print('not an event')
+        
+        if event:
+            new_post = Post.objects.create(
+                caption=caption,
+                image=image,
+                user=request.user,
+                event=True,
+                event_url=event_url,
+                venue=venue
+            )
+            new_post.save()
+        else:
+            new_post = Post.objects.create(
+                caption=caption,
+                image=image,
+                user=request.user
+            )
+            new_post.save()
         return redirect('main:index')
     return render(request, 'main/photo_upload.html')
 
@@ -118,3 +167,34 @@ def notifications(request):
         'notifications':notifications
     }
     return render(request, 'main/photo_notifications.html', context)
+
+
+@login_required
+def search(request):
+    posts = Post.objects.all()
+    query = request.GET['query']
+    if query:
+        posts = posts.filter(caption__icontains=query)
+    
+    context = {
+        'posts' : posts,
+        'query' : query
+    }
+    return render(request, 'main/search.html', context)
+
+
+@login_required
+def suggestion(request):
+    form = SuggestionForm(request.POST or None)
+    if form.is_valid():
+        # Save the currently logged in user
+        form.instance.user = request.user
+        form.save()
+
+        return redirect('main:index')
+    
+    context = {
+        'form' : form
+    }
+    return render(request, 'main/suggestion.html', context)
+

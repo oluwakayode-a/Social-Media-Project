@@ -101,8 +101,20 @@
 					</div>
 					<div class="col-lg-3">
 						<div class="follow-box">
+							{% if profile == request.user.profile %}
 							<a href="{% url 'accounts:edit_profile' %}" class="kafe-btn kafe-btn-mint"><i
 									class="fa fa-check"></i>Edit Profile</a>
+							{% else %}
+								{% is_following request.user profile.user.id as user_is_following %}
+		
+								{% if user_is_following  %}
+								<a href="{% url 'accounts:unfollow' profile.user.id %}" class="kafe-btn kafe-btn-mint"><i
+										class="fa fa-check"></i> Following</a>
+								{% else %}
+								<a href="{% url 'accounts:follow' profile.user.id %}" class="kafe-btn kafe-btn-mint"><i
+										class="fa fa-plus"></i> Follow</a>
+								{% endif %}
+							{% endif %}
 						</div>
 						<!--/ dropdown -->
 					</div>
@@ -145,7 +157,7 @@
 		<div class="row">
 			{% for post in posts %}
 			<div class="col-lg-4">
-				<a href="#myModal{{ post.id }}" data-toggle="modal">
+				<a href="#Modal{{ post.id }}" data-toggle="modal">
 					<div class="explorebox" style="background: linear-gradient( rgba(34,34,34,0.2), rgba(34,34,34,0.2)), url('{{ post.image.url }}') no-repeat;
 		          background-size: cover;
                   background-position: center center;
@@ -179,101 +191,118 @@
 <!-- ==============================================
 	 Modal Section
 	 =============================================== -->
-{% for post in posts %}
-<div id="myModal{{ post.id }}" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-body">
-
-				<div class="row">
-
-					<div class="col-md-8 modal-image">
-						<img class="img-responsive" src="{{ post.image.url }}" alt="Image" />
-					</div>
-					<!--/ col-md-8 -->
-					<div class="col-md-4 modal-meta">
-						<div class="modal-meta-top">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-								<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-							</button>
-							<!--/ button -->
-							<div class="img-poster clearfix">
-								{% if post.user.profile.profile_pic %}
-								<a href=""><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
-										alt="Image" /></a>
-								{% endif %}
-								<strong><a href="">{{ post.user.get_full_name }}</a></strong>
-								<span>{{ post.created | timesince }} ago</span><br />
-								
+	 <section id="modal">
+		{% for post in posts %}
+		<div id="Modal{{ post.id }}" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+		
+						<div class="row">
+		
+							<div class="col-md-8 modal-image">
+								<img class="img-responsive" src="{{ post.image.url }}" alt="Image" />
 							</div>
-							<!--/ img-poster -->
-
-							<ul class="img-comment-list">
-								{% for comment in post.comments.all %}
-								<li>
-									<div class="comment-img">
-										{% if comment.user.profile.profile_pic. %}
-										<img src="{{ comment.user.profile.profile_pic.url }}"
-											class="img-responsive img-circle" alt="Image" />
+							<!--/ col-md-8 -->
+							<div class="col-md-4 modal-meta">
+								<div class="modal-meta-top">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+										<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+									</button>
+									<!--/ button -->
+									<div class="img-poster clearfix">
+										{% if post.user.profile.profile_pic %}
+										<a href=""><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
+												alt="Image" /></a>
+										
+										{% endif %}
+										<strong><a href="">{{ post.user.get_full_name }}</a></strong>
+										<span>{{ post.created | timesince }} ago</span><br />
+										{% is_following request.user post.user.id as user_is_following %}
+	
+										{% if user_is_following  %}
+										<a href="" class="kafe kafe-btn-mint-small"><i class="fa fa-check-square"></i> Following</a>
+										{% else %}
+	
+											{% if not post.user == request.user %}
+											<a href="{% url 'accounts:follow' post.user.id %}" class="kafe kafe-btn-mint-small"><i class="fa fa-plus"></i> Follow</a>
+											{% endif %}	
 										{% endif %}
 									</div>
-									<div class="comment-text">
-										<strong><a href="">{{ comment.user.get_full_name }}</a></strong>
-										<p>{{ comment.text }}</p> <span class="date sub-text">on
-											{{ comment.created }}</span>
+									<!--/ img-poster -->
+		
+									<ul class="img-comment-list" id="comment-list-{{ post.id }}">
+										{% for comment in post.comments.all %}
+										<li>
+											<div class="comment-img">
+												{% if comment.user.profile.profile_pic. %}
+												<img src="{{ comment.user.profile.profile_pic.url }}" class="img-responsive img-circle"
+													alt="Image" />
+												
+												{% endif %}
+											</div>
+											<div class="comment-text">
+												<strong><a href="">{{ comment.user.get_full_name }}</a></strong>
+												<p>{{ comment.text }}</p> <span class="date sub-text">on {{ comment.created }}</span>
+											</div>
+										</li>
+										{% endfor %}
+										<!--/ li -->
+									</ul>
+									<!--/ comment-list -->
+		
+									<div class="modal-meta-bottom">
+										<ul>
+											<li><a 
+												class="modal-like"
+												
+												{% if post|has_liked:request.user %} style="color:#e16a70" 
+												{% else %} style="color:#b2b2b2" 
+												{% endif %}><i class="fa fa-heart"></i></a>
+												<span
+													class="modal-one"> {{ post.like_count }}</span> |
+												<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
+													{{ post.comment_count }}</span> </li>
+											<li>
+												<span class="thumb-xs">
+													{% if request.user.profile.profile_pic %}
+													<img class="img-responsive img-circle" src="{{ request.user.profile.profile_pic.url }}"
+														alt="Image">
+													{% endif %}
+												</span>
+												<form class="comment-body form-group" method="POST" v-on:submit.prevent="addComment({{ post.id }})">
+													{% csrf_token %}
+													<input 
+														class="form-control input-sm" 
+														type="text"
+														v-model="comment_text"
+														placeholder="Write your comment..." required id="comment-input" name="comment_text">
+														<input type="hidden" name="post_id" value="{{ post.id }}" class="post_id">
+													<button type="submit" class="btn form-control btn-sm btn-default">Submit</button>
+												</form>
+												<!--/ comment-body -->
+											</li>
+										</ul>
 									</div>
-								</li>
-								{% endfor %}
-								<!--/ li -->
-							</ul>
-							<!--/ comment-list -->
-
-							<div class="modal-meta-bottom">
-								<ul>
-									<li><a class="modal-like" href="{% url 'main:like' post.id %}"
-											{% if post|has_liked:request.user %} style="color:#e16a70" {% else %}
-											style="color:#b2b2b2" {% endif %}><i class="fa fa-heart"></i></a><span
-											class="modal-one"> {{ post.like_count }}</span> |
-										<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
-											{{ post.comment_count }}</span> </li>
-									<li>
-										<span class="thumb-xs">
-											{% if request.user.profile.profile_pic %}
-											<img class="img-responsive img-circle"
-												src="{{ request.user.profile.profile_pic.url }}" alt="Image">
-											{% endif %}
-										</span>
-										<form class="comment-body form-group" method="POST"
-											action="{% url 'main:add_comment' %}">
-											{% csrf_token %}
-											<input class="form-control input-sm" type="text"
-												placeholder="Write your comment..." id="comment-input"
-												name="comment_text">
-											<input type="hidden" name="post_id" value="{{ post.id }}" class="post_id">
-											<button type="submit"
-												class="btn form-control btn-sm btn-default">Submit</button>
-										</form>
-										<!--/ comment-body -->
-									</li>
-								</ul>
+									<!--/ modal-meta-bottom -->
+		
+								</div>
+								<!--/ modal-meta-top -->
 							</div>
-
+							<!--/ col-md-4 -->
 						</div>
-						<!--/ modal-meta-top -->
+						<!--/ row -->
 					</div>
-					<!--/ col-md-4 -->
-
+					<!--/ modal-body -->
+		
 				</div>
-				<!--/ row -->
+				<!--/ modal-content -->
 			</div>
-			<!--/ modal-body -->
-
+			<!--/ modal-dialog -->
 		</div>
-		<!--/ modal-content -->
-	</div>
-	<!--/ modal-dialog -->
-</div>
-{% endfor %}
+		{% endfor %}
+		
+	</section>
 
 {% endblock %}
 

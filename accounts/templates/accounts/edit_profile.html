@@ -13,7 +13,8 @@
       <form method="post" class="form-signin" enctype="multipart/form-data">
         {% csrf_token %}
         <h3 class="form-signin-heading">Edit Profile</h3>
-        {% bootstrap_form form %}
+        {% bootstrap_form user_form %}
+        {% bootstrap_form profile_form %}
         <button class="kafe-btn kafe-btn-mint btn-block" type="submit" name="subm">Save Changes</button>
         <br />
       </form>
