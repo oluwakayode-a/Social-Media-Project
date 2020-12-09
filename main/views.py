@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from accounts.models import Profile, UserFollowing
 from .models import Post, Like, Comment, Notification
-from .forms import SuggestionForm
+from .forms import SuggestionForm, ReportForm
 from django.contrib.auth.decorators import login_required
 import json
 
@@ -26,6 +26,26 @@ def index(request):
         'posts' : posts,
     }
     return render(request, 'main/photo_home.html', context)
+
+
+@login_required
+def post(request, id):
+    post = get_object_or_404(Post, id=id)
+
+    return render(request, 'main/photo_single_post.html', {'post' : post})
+
+
+def report(request, id):
+    post = get_object_or_404(Post, id=id)
+    form = ReportForm(request.POST or None)
+    if form.is_valid():
+        form.instance.post = post
+        form.instance.user = request.user
+        form.save()
+
+        return redirect('main:index')
+
+    return render(request, 'main/report.html', {'post' : post, 'form' : form})
 
 
 @login_required
@@ -121,7 +141,7 @@ def upload(request):
             event_url = request.POST['event-url']
             venue = request.POST['venue']
         except:
-            print('not an event')
+            pass
         
         if event:
             new_post = Post.objects.create(

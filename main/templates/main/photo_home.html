@@ -112,6 +112,7 @@
 						<div class="media-body">
 							<a href="{% url 'accounts:user' post.user.username %}"><p class="m-0">{{ post.user.get_full_name }}</p></a>
 							<small><span>{{ post.created | timesince }} ago</span></small>
+							<a href="{% url 'main:report' post.id %}" class="pull-right mb-4" style="color: black;">Report Post</a>
 						</div>
 					</div>
 					<!--/ media -->
@@ -148,6 +149,13 @@
 						<span id="likes-{{ post.id }}"> {{ post.like_count }}</span></li>
 						<li><a title="" class="com"><i class="fa fa-comments"></i></a> <span
 								class="span-last"> {{ post.comment_count }}</span></li>
+						<li><span>Share:</span></li>
+						<li>
+							<a 
+								href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}post/{{ post.id }}" 
+								title="">
+								<i class="fa fa-facebook"></i></a></li>
+						<li><a href="https://twitter.com/intent/tweet?text={{ request.build_absolute_uri }}post/{{ post.id }}" title=""><i class="fa fa-twitter"></i></a></li>
 					</ul>
 				</div>
 				<!--/ cardbox-like -->
@@ -283,5 +291,9 @@
 
 
 {% block extra_scripts %}
-	
+	<script>
+		let el = $('#home');
+		el.removeClass('dark-black');
+		el.addClass('mint-green');
+	</script>
 {% endblock extra_scripts %}

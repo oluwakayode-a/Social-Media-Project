@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Profile, UserFollowing, Interest
+from .models import Profile, UserFollowing
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .forms import ProfileForm, InterestForm, EditUser
+from .forms import ProfileForm, EditUser
 from main.models import Notification, Post
 
 User = get_user_model()
@@ -82,6 +82,34 @@ def user(request, user):
         'posts' : posts
     }
     return render(request, 'accounts/photo_profile.html', context)
+
+
+@login_required
+def user_followers(request, user):
+    user = User.objects.get(username=user)
+    # isolate all user ids of users following currently logged in user
+    excluded = [user.user_id.id for user in user.followers.all()]
+
+    # list all users following logged in user.
+    followers = User.objects.filter(id__in=excluded).exclude(username=user.username)
+    context = {
+        'followers' : followers
+    }
+    return render(request, 'accounts/photo_followers.html', context)
+
+
+@login_required
+def user_following(request, user):
+    user = User.objects.get(username=user)
+    # isolate all user ids of users followed by currently logged in user
+    excluded = [user.following_user_id.id for user in user.following.all()]
+
+    # list all users followed by logged in user.
+    following = User.objects.filter(id__in=excluded).exclude(username=user.username)
+    context = {
+        'following' : following
+    }
+    return render(request, 'accounts/photo_following.html', context)
 
 
 @login_required

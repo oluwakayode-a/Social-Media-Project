@@ -1,17 +1,17 @@
 from django import forms
 from allauth.account.forms import SignupForm
-from .models import Profile, Interest, User
+from .models import Profile, User
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'interests']
+        exclude = ['user',]
 
 
-class InterestForm(forms.ModelForm):
-    class Meta:
-        model = Interest
-        fields = ('interests',)
+# class InterestForm(forms.ModelForm):
+#     class Meta:
+#         model = Interest
+#         fields = ('interests',)
 
 class CustomSignupForm(SignupForm):
     first_name = forms.CharField(max_length=100, label='First Name', required=True)
@@ -27,4 +27,4 @@ class CustomSignupForm(SignupForm):
 class EditUser(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name')
+        fields = ('username', 'first_name', 'last_name')

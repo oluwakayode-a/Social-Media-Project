@@ -196,6 +196,10 @@
 
 {% block extra_scripts %}
 <script>
+	let el = $('#upload');
+	el.removeClass('dark-black');
+	el.addClass('mint-green');
+	
 	function eventAction() {    
 		var x = document.getElementById("EventInfo");
 		let eventURL = $('#url-type-styled-input')

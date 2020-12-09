@@ -138,10 +138,17 @@
 			<div class="menu-category">
 				<ul class="menu">
 					<li class="current-menu-item"><a>Posts <span>{{ posts | length }}</span></a></li>
+					{% if profile == request.user.profile %}
 					<li><a href="{% url 'accounts:followers' %}">Followers
 							<span>{{ profile.user.followers.all | length }}</span></a></li>
 					<li><a href="{% url 'accounts:following' %}">Following
 							<span>{{ profile.user.following.all | length }}</span></a></li>
+					{% else %}
+					<li><a href="{% url 'accounts:user_followers' profile.user.username %}">Followers
+						<span>{{ profile.user.followers.all | length }}</span></a></li>
+					<li><a href="{% url 'accounts:user_following' profile.user.username %}">Following
+						<span>{{ profile.user.following.all | length }}</span></a></li>
+					{% endif %}
 				</ul>
 			</div>
 

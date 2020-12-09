@@ -106,7 +106,11 @@
                                         <div id="Slim">
                                             <!-- fa-user-plus, fa-heart fa-comment -->
                                             {% for notification in request.user.notifications.all %}
-                                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                            {% if notification.notification_type == 'user-plus' %}
+                                            <a href="{% url 'accounts:user' notification.user_from.username %}" class="dropdown-item notify-item">
+                                            {% else %}
+                                            <a href="{% url 'main:post' notification.post.id %}" class="dropdown-item notify-item">
+                                            {% endif %}
                                                 <div class="notify-icon bg-success"><i class="fa fa-{{ notification.notification_type }}"></i></div>
                                                 <p class="notify-details">{{ notification.text }}<small
                                                         class="text-muted">{{ notification.created | timesince }} ago</small></p>
@@ -148,7 +152,6 @@
                                 </span>
                             </a>
                             <div class="dropdown-menu w dropdown-menu-scale pull-right">
-                                <a class="dropdown-item" href="#"><span>New Story</span></a>
                                 <!-- <a class="dropdown-item" href="#"><span>Become a Member</span></a> -->
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/profile/"><span>Profile</span></a>
@@ -212,6 +215,7 @@
     <script src="{% static 'js/base.js' %}"></script>
     <script src="{% static 'plugins/slimscroll/jquery.slimscroll.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    {% block extra_scripts %} {% endblock %}
     <script>
         $('#Slim,#Slim2').slimScroll({
             height: "auto",
@@ -222,10 +226,6 @@
         });
     </script>
     <script>
-		let el = $('#home');
-		el.removeClass('dark-black');
-		el.addClass('mint-green');
-
 		const modals = new Vue({
 			el: '#modal',
 			data() {
@@ -331,8 +331,6 @@
 			},
 		})
 	</script>
-
-    {% block extra_scripts %} {% endblock %}
 
 </body>
 

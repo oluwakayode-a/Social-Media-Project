@@ -12,7 +12,11 @@
     <div class="banner-content">
 
       <h1><i class="fa fa-smile"></i> Earthruh</h1>
-      <form method="post" class="form-signin" action="{% url 'account_login' %}">
+      
+      <div class="form-signin" style="margin-top: 10px;">
+        <a href="{% provider_login_url 'google' %}" class="kafe-btn kafe-btn-mint btn-block">Login with Google.</a>
+      </div>
+      <!-- <form method="post" class="form-signin" action="{% url 'account_login' %}">
         {% csrf_token %}
         <h3 class="form-signin-heading">Please sign in</h3>
         {% bootstrap_form form %}
@@ -23,7 +27,7 @@
         <br />
         <a class="btn btn-dark " href="{{ signup_url }}" role="button">Don't have an account yet? Register Here.</a>
         <a class="btn btn-dark " href="{% url 'account_reset_password' %}" role="button">Forgot your password?</a>
-      </form>
+      </form> -->
 
     </div>
     <!--/. banner-content -->

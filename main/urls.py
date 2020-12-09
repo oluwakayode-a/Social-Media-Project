@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('post/<int:id>', views.post, name='post'),
+    path('report/<int:id>', views.report, name='report'),
     path('category/<str:category>/', views.category, name='category'),
     path('comment/', views.add_comment, name='add_comment'),
     path('like/', views.like_toggle, name='like'),

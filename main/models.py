@@ -68,7 +68,6 @@ class Notification(models.Model):
     def __str__(self):
         return self.text
 
-
 class Suggestion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
@@ -76,3 +75,14 @@ class Suggestion(models.Model):
 
     def __str__(self):
         return f"Suggestion by @{self.user.username}"
+
+
+class Report(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    text = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report on {self.post} by {self.user}"
+    
