@@ -1,6 +1,19 @@
 {% extends 'main/base.html' %}
 {% load check_post_liked %}
 {% load check_user_following %}
+
+
+{% block meta %}
+<meta property="og:title" content="" />
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+<meta property="og:description" content="{{ post.caption }}" />
+<meta property="og:image" content="{{ post.image.url }}">
+<meta name="twitter:title" content="">
+<meta name="twitter:image" content="{{ post.image.url }}">
+<meta name="twitter:url" content="{{ request.build_absolute_uri }}">
+{% endblock meta %}
+	
+
 {% block content %}
 	 <!-- ==============================================
 	 Modal Section
