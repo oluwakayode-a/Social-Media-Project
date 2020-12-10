@@ -148,6 +148,42 @@
 			<!--/ cardbox -->
 			{% endfor %}
 
+			<div class="row one-row">
+				<div class="col-lg-12">
+					<a>
+						<h4>Users</h4>
+					</a>
+				</div>
+			</div>
+		
+			<div class="row top-row">
+				{% for user in users %}
+				<div class="col-lg-12">
+					<div class="tr-section">
+						<div class="tr-post">
+							<div class="entry-header">
+								<div class="entry-thumbnail">
+									<a href="#"><img class="img-fluid" src="/static/img/posts/30.jpg" alt="Image"></a>
+								</div><!-- /entry-thumbnail -->
+							</div><!-- /entry-header -->
+							<div class="post-content">
+								<div class="author-post text-center">
+									{% if user.profile.profile_pic %}
+									<a href="{% url 'accounts:user' user.id %}"><img class="img-fluid rounded-circle" src="{{ user.profile.profile_pic.url }}"
+											alt="Image"></a>
+									{% endif %}
+								</div><!-- /author -->
+								<div class="card-content">
+									<h4>{{ user.get_full_name }}</h4>
+									<span>@{{ user.username }}</span>
+								</div>
+							</div><!-- /.post-content -->
+						</div><!-- /.tr-post -->
+					</div><!-- /.tr-post -->
+				</div><!-- /col-sm-3 -->
+				{% endfor %}
+		
+			</div>
 		</div>
 		<!--/ col-lg-6 -->
 		<div class="col-lg-3">
@@ -210,6 +246,7 @@
 		</div>
 		
 	   </div><!--/ row -->
+
 	  </div><!--/ container -->
 	 </section><!--/ newsfeed -->
   

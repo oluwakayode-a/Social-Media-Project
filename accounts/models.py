@@ -9,6 +9,14 @@ import main.models
 class User(AbstractUser):
     pass
 
+    @property
+    def liked_posts(self):
+        posts = []
+        for post in main.models.Post.objects.all():
+            if post.is_liked_by_user(self):
+                posts.append(post.id)
+        return posts
+
 
 # class Interest(models.Model):
 #     CHOICES = [
@@ -48,8 +56,8 @@ class Profile(models.Model):
     gender = models.CharField(max_length=20, choices=GENDERS, default='------')
     date_of_birth = models.DateField(null=True)
     # interests = models.ForeignKey(Interest, on_delete=models.CASCADE, related_name='profile', null=True, blank=True)
-    website = models.URLField(default='https://www.earthruh.com')
-    bio = models.CharField(max_length=170, default="Input Bio Here.")
+    website = models.URLField(default='')
+    bio = models.CharField(max_length=170, default="")
     verified = models.BooleanField(default=False)
 
 

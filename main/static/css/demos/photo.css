@@ -729,7 +729,7 @@ a.navbar-brand:hover {
   padding: 0px 10px 0px 0px !important;
 }
 .cardbox-like li a {
-  color: #e16a70;
+  /* color: #e16a70; */
   font-size: 14px;
   float: left;
   padding-top: 6px;
@@ -860,7 +860,7 @@ a.navbar-brand:hover {
 }
 .modal-meta-bottom li a.modal-like i{
   font-size: 14px !important;
-  color: #e16a70 !important;
+  color: #e16a70;
   margin-right: 4px;
   margin-left: 10px;
 }

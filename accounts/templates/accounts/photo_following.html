@@ -11,21 +11,25 @@
 
 					<div class="followers-box full-width">
 						<div class="followers-list">
-							{% for user in following %}
-							<div class="followers-body">
-								{% if user.profile.profile_pic %}
-								<img class="img-responsive img-circle" src="{{ user.profile.profile_pic.url }}" alt="">
-								{% endif %}
-								<div class="name-box">
-									<h4>{{ user.get_full_name }}</h4>
-									<span>@{{ user.username }}</span>
-									
-									<!--/ followers-base -->
+							{% if following %}
+								{% for user in following %}
+								<div class="followers-body">
+									{% if user.profile.profile_pic %}
+									<img class="img-responsive img-circle" src="{{ user.profile.profile_pic.url }}" alt="">
+									{% endif %}
+									<div class="name-box">
+										<h4>{{ user.get_full_name }}</h4>
+										<span>@{{ user.username }}</span>
+										
+										<!--/ followers-base -->
+									</div>
+									<!--/ name-box -->
+									<span><a href="{% url 'accounts:unfollow' user.id %}" class="kafe-btn kafe-btn-mint-small"> Unfollow</a></span>
 								</div>
-								<!--/ name-box -->
-								<span><a href="{% url 'accounts:unfollow' user.id %}" class="kafe-btn kafe-btn-mint-small"> Unfollow</a></span>
-							</div>
-							{% endfor %}
+								{% endfor %}
+							{% else %}
+							<h1>You're not following any users</h1>
+							{% endif %}
 							<!--/ followers-body -->
 							<!--/ followers-body -->
 						</div>

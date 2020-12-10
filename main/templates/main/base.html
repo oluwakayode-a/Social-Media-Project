@@ -283,7 +283,9 @@
 			el: '#posts',
 			data() {
 				return {
-					liked_posts : [{% for post in request.user.liked_posts %} {{ post }}, {% endfor %}]
+					liked_posts : [{% for post in request.user.liked_posts %} {{ post }}, {% endfor %}],
+                    user_id : '{{ request.user.id }}',
+                    user_image_url: '{{ request.user.profile.profile_pic.url }}'
 				}
 			},
 			methods: {
@@ -309,18 +311,37 @@
 					
 					// Check if like is added or removed
 					const el = document.getElementById(`likes-${post_id}`)
+                    const likeImageContainer = document.getElementById(`like-images-${post_id}`)
+
 					if (this.liked_posts.includes(post_id)) {
 						this.liked_posts = this.liked_posts.filter(id => {
 							return id !== post_id
 						})
 						// parse string to number
 						el.innerHTML = parseInt(el.innerHTML) - 1
+                        el.previousElementSibling.style.color = '#b2b2b2'
+
+                        // Remove image
+                        const userImage = document.getElementById(`like-image-${this.user_id}`)
+                        userImage.parentElement.removeChild(userImage)
+                        
 						console.log(typeof parseInt(el.innerHTML))
 						// console.log('unliked')
 						// console.log(this.liked_posts)
 					} else {
 						this.liked_posts.push(post_id)
 						el.innerHTML = parseInt(el.innerHTML) + 1
+                        el.previousElementSibling.style.color = '#e16a70'
+
+                        // Add Image
+                        let li = document.createElement('li')
+                        li.id = `like-image-${this.user_id}`
+                        li.innerHTML = `
+                        <a href="#"><img src="${this.user_image_url}" class="img-responsive img-circle"
+						alt="User"></a>
+                        `
+                        likeImageContainer.appendChild(li)
+                        
 						// console.log(typeof parseInt(el.innerHTML))
 						// console.log('liked')
 						// console.log(this.liked_posts)

@@ -7,8 +7,7 @@ User = get_user_model()
 class Post(models.Model):
     CATEGORIES = [
         ('art', 'Art'),
-        ('photography', 'Photography'),
-        ('design', 'Design')
+        ('photography', 'Photography')
     ]
     caption = models.CharField(max_length=500, blank=True, null=True)
     event = models.BooleanField(default=False)

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from accounts.models import Profile, UserFollowing
+from django.db.models import Q
 from .models import Post, Like, Comment, Notification
 from .forms import SuggestionForm, ReportForm
 from django.contrib.auth.decorators import login_required
@@ -133,6 +134,7 @@ def upload(request):
     if request.method == 'POST':
         caption = request.POST['caption']
         image = request.FILES['file-input']
+        category = request.POST['category']
 
         event = None
         event_url = None
@@ -150,14 +152,16 @@ def upload(request):
                 user=request.user,
                 event=True,
                 event_url=event_url,
-                venue=venue
+                venue=venue,
+                category=category
             )
             new_post.save()
         else:
             new_post = Post.objects.create(
                 caption=caption,
                 image=image,
-                user=request.user
+                user=request.user,
+                category=category
             )
             new_post.save()
         return redirect('main:index')
@@ -192,12 +196,19 @@ def notifications(request):
 @login_required
 def search(request):
     posts = Post.objects.all()
+    users = User.objects.all()
     query = request.GET['query']
     if query:
         posts = posts.filter(caption__icontains=query)
-    
+        users = users.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query)
+        ).distinct()
+
     context = {
         'posts' : posts,
+        'users' : users,
         'query' : query
     }
     return render(request, 'main/search.html', context)
