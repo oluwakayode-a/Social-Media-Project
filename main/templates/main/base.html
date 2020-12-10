@@ -285,7 +285,11 @@
 				return {
 					liked_posts : [{% for post in request.user.liked_posts %} {{ post }}, {% endfor %}],
                     user_id : '{{ request.user.id }}',
-                    user_image_url: '{{ request.user.profile.profile_pic.url }}'
+                    user_image_url: {% if request.user.profile.profile_pic %}
+                                        '{{ request.user.profile.profile_pic.url }}'
+                                    {% else %}
+                                    ''
+                                    {% endif %}
 				}
 			},
 			methods: {
