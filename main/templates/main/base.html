@@ -84,10 +84,16 @@
                         </li>
 
                         <li class="dropdown notification-list">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                            <a 
+                                onclick="setNotificationToZero()" 
+                                class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                                 aria-haspopup="false" aria-expanded="false">
                                 <i class="fa fa-bell noti-icon"></i>
-                                <span class="badge badge-danger badge-pill noti-icon-badge">{{ request.user.notifications.all | length }}</span>
+                                <span
+                                    id="notification-badge"
+                                    class="badge badge-danger badge-pill noti-icon-badge">
+                                    {{ request.user.profile.notification_count }}
+                                </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-lg">
 
@@ -156,7 +162,7 @@
                                 <a class="dropdown-item" href="/suggestion/"><span>Leave a suggestion</span></a>
                                 <!-- <a class="dropdown-item" href="#">Need help?</a> -->
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/auth/logout/">Sign out</a>
+                                <a class="dropdown-item" href="{% url 'accounts:logout' %}">Sign out</a>
                             </div>
                         </li><!-- /navbar-item -->
 
@@ -222,6 +228,24 @@
             alwaysVisible: true,
             size: "8px",
         });
+        let setNotificationToZero = () => {
+            fetch('/set_notification_zero/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'X-CSRFToken' : '{{ csrf_token }}',
+                },
+                credentials: 'same-origin',
+            })
+            .then(response => {
+                console.log(response)
+                console.log('done')
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            document.getElementById('notification-badge').innerHTML = '0';
+        }
     </script>
     <script>
 		const modals = new Vue({

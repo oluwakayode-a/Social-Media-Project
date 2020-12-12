@@ -107,11 +107,14 @@
 						 	<em class="fa fa-ellipsis-h"></em>
 						</button>
 						<div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-							<a class="dropdown-item" 
+							<a class="dropdown-item"
+								target="_blank"
 								href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}post/{{ post.id }}">Share on Facebook</a>
-							<a class="dropdown-item" 
+							<a class="dropdown-item"
+								target="_blank" 
 								href="https://twitter.com/intent/tweet?text={{ request.build_absolute_uri }}post/{{ post.id }}">Share on Twitter</a>
 							<a class="dropdown-item"
+								target="_blank"
 								href="whatsapp://send?text={{ request.build_absolute_uri }}post/{{ post.id }}" data-action="share/whatsapp/share">Share on WhatsApp</a>
 							
 							{% if not post.user == request.user %}
@@ -139,6 +142,15 @@
 				<!--/ cardbox-heading -->
 
 				<div class="cardbox-item">
+					<div class="container-fluid">
+						{% if post.event %}
+						<p>Event</p>
+						<p>{{ post.event_url }}</p>
+						<p>{{ post.venue }}</p>
+						{% else %}
+						<p>{{ post.caption }}</p>
+						{% endif %}
+					</div>
 					<a href="#Modal{{ post.id }}" data-toggle="modal">
 						<img class="img-responsive" src="{{ post.image.url }}" alt="MaterialImg">
 					</a>
@@ -168,7 +180,7 @@
 								class="fa fa-heart"></i>
 							</a>
 						<span id="likes-{{ post.id }}"> {{ post.like_count }}</span></li>
-						<li><a title="" class="com"><i class="fa fa-comments"></i></a> <span
+						<li><a href="#Modal{{ post.id }}" data-toggle="modal" class="com"><i class="fa fa-comments"></i></a> <span
 								class="span-last"> {{ post.comment_count }}</span></li>						
 					</ul>
 				</div>

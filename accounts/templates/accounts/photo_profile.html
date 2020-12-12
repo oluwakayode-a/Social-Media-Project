@@ -94,8 +94,8 @@
 						<div class="content-box">
 							<h4>{{ profile.user.get_full_name }} {% if profile.verified %}<i
 									class="fa fa-check"></i>{% endif %}</h4>
-							<p>{{ profile.bio }} <span class="hashtag">#pixels</span></p>
-							<small><span>{{ profile.website }}</span></small>
+							<p>{{ profile.bio }}</p>
+							<small><span><a target="_blank" style="color: #0fc19e;" href="{{ profile.website }}">{{ profile.website }}</a></span></small>
 						</div>
 						<!--/ media -->
 					</div>

@@ -54,11 +54,12 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     gender = models.CharField(max_length=20, choices=GENDERS, default='------')
-    date_of_birth = models.DateField(null=True)
+    date_of_birth = models.DateField(null=True, blank=True)
     # interests = models.ForeignKey(Interest, on_delete=models.CASCADE, related_name='profile', null=True, blank=True)
-    website = models.URLField(default='')
-    bio = models.CharField(max_length=170, default="")
+    website = models.URLField(default='', blank=True)
+    bio = models.CharField(max_length=170, default="", blank=True)
     verified = models.BooleanField(default=False)
+    notification_count = models.IntegerField(default=0)
 
 
     def __str__(self):

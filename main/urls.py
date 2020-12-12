@@ -13,6 +13,7 @@ urlpatterns = [
     path('explore/', views.explore, name='explore'),
     path('notifications/', views.notifications, name='notifications'),
     path('search/', views.search, name='search'),
-    path('suggestion/', views.suggestion, name='suggestion')
+    path('suggestion/', views.suggestion, name='suggestion'),
+    path('set_notification_zero/', views.set_notification_zero, name='set_notification_zero'),
 ]
 

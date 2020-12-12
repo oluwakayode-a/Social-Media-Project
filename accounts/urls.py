@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('follow/<int:target_id>', views.follow, name='follow'),
@@ -11,5 +12,6 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('edit_interests/', views.edit_interests, name='edit_interests'),
     path('followers/', views.followers, name='followers'),
-    path('following/', views.following, name='following')
+    path('following/', views.following, name='following'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]

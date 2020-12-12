@@ -28,6 +28,13 @@ def index(request):
     }
     return render(request, 'main/photo_home.html', context)
 
+@login_required
+def set_notification_zero(request):
+    request.user.profile.notification_count = 0
+    request.user.profile.save()
+    response = {'success' : True}
+    return JsonResponse(response)
+
 
 @login_required
 def post(request, id):
@@ -123,6 +130,10 @@ def like_toggle(request):
             text=f'{request.user.get_full_name()} liked your post'
         )
         new_notification.save()
+        
+        # Increment notification count
+        request.user.profile.notification_count += 1
+        request.user.profile.save()
     
     response = {'success' : True}
 
