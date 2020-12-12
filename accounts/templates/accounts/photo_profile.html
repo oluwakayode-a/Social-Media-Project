@@ -66,10 +66,16 @@
 			<div class="col-lg-12">
 				<div class="post-content">
 					<div class="author-post text-center">
-						{% if profile.profile_pic %}
-						<a href="#"><img class="img-fluid img-circle" src="{{ profile.profile_pic.url }}"
-								alt="Image"></a>
-						{% endif %}
+						
+						<a href="#">
+							{% if profile.profile_pic %}
+							<img class="img-fluid img-circle" src="{{ profile.profile_pic.url }}"
+								alt="Image">
+							{% else %}
+							<img class="img-fluid img-circle" src="/static/img/user.png/"
+								alt="Image">
+							{% endif %}
+						</a>
 					</div><!-- /author -->
 				</div><!-- /.post-content -->
 			</div><!-- /col-sm-12 -->
@@ -177,10 +183,17 @@
 							<div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
 						</div>
 						<div class="explore-body">
-							{% if post.user.profile.profile_pic %}
-							<div class=""><img class="img-circle" src="{{ post.user.profile.profile_pic.url }}"
-									alt="user"></div>
-							{% endif %}
+							
+							<div class="">
+								{% if post.user.profile.profile_pic %}
+								<img class="img-circle" src="{{ post.user.profile.profile_pic.url }}"
+									alt="user">
+								{% else %}
+								<img class="img-circle" src="/static/img/user.png/"
+									alt="user">
+								{% endif %}
+							</div>
+							
 						</div>
 					</div>
 				</a>
@@ -218,11 +231,17 @@
 									</button>
 									<!--/ button -->
 									<div class="img-poster clearfix">
-										{% if post.user.profile.profile_pic %}
-										<a href=""><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
-												alt="Image" /></a>
 										
-										{% endif %}
+										<a href="">
+											{% if post.user.profile.profile_pic %}
+											<img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
+												alt="Image" />
+											{% else %}
+											<img class="img-responsive img-circle" src="/static/img/user.png"
+												alt="Image" />
+											{% endif %}
+										</a>
+										
 										<strong><a href="">{{ post.user.get_full_name }}</a></strong>
 										<span>{{ post.created | timesince }} ago</span><br />
 										{% is_following request.user post.user.id as user_is_following %}
@@ -244,6 +263,9 @@
 											<div class="comment-img">
 												{% if comment.user.profile.profile_pic. %}
 												<img src="{{ comment.user.profile.profile_pic.url }}" class="img-responsive img-circle"
+													alt="Image" />
+												{% else %}
+												<img src="/static/img/user.png" class="img-responsive img-circle"
 													alt="Image" />
 												
 												{% endif %}
@@ -274,6 +296,9 @@
 												<span class="thumb-xs">
 													{% if request.user.profile.profile_pic %}
 													<img class="img-responsive img-circle" src="{{ request.user.profile.profile_pic.url }}"
+														alt="Image">
+													{% else %}
+													<img class="img-responsive img-circle" src="/static/img/user.png/"
 														alt="Image">
 													{% endif %}
 												</span>
