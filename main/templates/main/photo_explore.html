@@ -29,8 +29,11 @@
 						<div class="post-content">
 							<div class="author-post text-center">
 								{% if user.profile.profile_pic %}
-								<a href="#"><img class="img-fluid rounded-circle" src="{{ user.profile.profile_pic.url }}"
+								<a href="{% url 'accounts:user' user.username %}"><img class="img-fluid rounded-circle" src="{{ user.profile.profile_pic.url }}"
 										alt="Image"></a>
+								{% else %}
+								<a href="{% url 'accounts:user' user.username %}"><img class="img-fluid rounded-circle" src="/static/img/user.png/"
+									alt="Image"></a>
 								{% endif %}
 							</div><!-- /author -->
 							<div class="card-content">
@@ -68,7 +71,13 @@
 							<div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
 						</div>
 						<div class="explore-body">
-							<div class=""><img class="img-circle" src="{{ post.user.profile.profile_pic.url }}" alt="user"></div>
+							<div class="">
+								{% if post.user.profile.profile_pic %}
+								<img class="img-circle" src="{{ post.user.profile.profile_pic.url }}" alt="user">
+								{% else %}
+								<img class="img-circle" src="/static/img/user.png/" alt="user">
+								{% endif %}
+							</div>
 						</div>
 					</div>
 				</a>
@@ -110,7 +119,9 @@
 										{% if post.user.profile.profile_pic %}
 										<a href=""><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
 												alt="Image" /></a>
-										
+										{% else %}
+										<a href=""><img class="img-responsive img-circle" src="/static/img/user.png/"
+											alt="Image" /></a>
 										{% endif %}
 										<strong><a href="">{{ post.user.get_full_name }}</a></strong>
 										<span>{{ post.created | timesince }} ago</span><br />
@@ -131,10 +142,12 @@
 										{% for comment in post.comments.all %}
 										<li>
 											<div class="comment-img">
-												{% if comment.user.profile.profile_pic. %}
+												{% if comment.user.profile.profile_pic %}
 												<img src="{{ comment.user.profile.profile_pic.url }}" class="img-responsive img-circle"
 													alt="Image" />
-												
+												{% else %}
+												<img src="/static/img/user.png" class="img-responsive img-circle"
+													alt="Image" />
 												{% endif %}
 											</div>
 											<div class="comment-text">
@@ -163,6 +176,9 @@
 												<span class="thumb-xs">
 													{% if request.user.profile.profile_pic %}
 													<img class="img-responsive img-circle" src="{{ request.user.profile.profile_pic.url }}"
+														alt="Image">
+													{% else %}
+													<img class="img-responsive img-circle" src="/static/img/user.png/"
 														alt="Image">
 													{% endif %}
 												</span>

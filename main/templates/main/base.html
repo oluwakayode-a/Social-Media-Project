@@ -148,6 +148,9 @@
                                     {% if request.user.profile.profile_pic %}
                                     <img src="{{ request.user.profile.profile_pic.url }}"
                                         class="img-resonsive img-circle" width="25" height="25" alt="...">
+                                    {% else %}
+                                    <img src="/static/img/user.png/"
+                                        class="img-resonsive img-circle" width="25" height="25" alt="...">
                                     {% endif %}
                                 </span>
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
@@ -288,7 +291,9 @@
 						{% if request.user.profile.profile_pic. %}
 						<img src="{{ request.user.profile.profile_pic.url }}" class="img-responsive img-circle"
 							alt="Image" />
-						
+                        {% else %}
+                        <img src="/static/img/user.png/" class="img-responsive img-circle"
+							alt="Image" />
 						{% endif %}
 					</div>
 					<div class="comment-text">

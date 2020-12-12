@@ -107,6 +107,9 @@
 							{% if post.user.profile.profile_pic %}
 							<a href="#"><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
 									alt="User"></a>
+							{% else %}
+							<a href="#"><img class="img-responsive img-circle" src="/static/img/user.png/"
+								alt="User"></a>
 							{% endif %}
 						</div>
 						<div class="media-body">
