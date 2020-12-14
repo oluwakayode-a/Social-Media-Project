@@ -304,6 +304,12 @@
 					el.appendChild(li)
 					// Empty comment input
 					this.comment_text = '';
+
+                    // Increment Comment Count
+                    const postComment = document.getElementById(`post-comment-count-${post_id}`)
+                    const modalComment = document.getElementById(`modal-comment-count-${post_id}`)
+                    postComment.innerHTML = parseInt(postComment.innerHTML) + 1;
+                    modalComment.innerHTML = parseInt(modalComment.innerHTML) + 1;
 				}
 			}
 		})

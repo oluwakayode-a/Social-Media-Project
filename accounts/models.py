@@ -3,12 +3,14 @@ from multiselectfield import MultiSelectField
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from phone_field import PhoneField
 import main.models
 
 # Create your models here.
 class User(AbstractUser):
-    pass
+    full_name = models.CharField(max_length=1000)
 
+    # Get all posts liked by user
     @property
     def liked_posts(self):
         posts = []
@@ -16,6 +18,12 @@ class User(AbstractUser):
             if post.is_liked_by_user(self):
                 posts.append(post.id)
         return posts
+    
+    # Set full_name field to user's full name upon sign up. For search purposes.
+    def save(self, *args, **kwargs):
+        self.full_name = self.get_full_name()
+
+        super(User, self).save(*args, **kwargs)
 
 
 # class Interest(models.Model):
@@ -43,8 +51,6 @@ class User(AbstractUser):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-
-
 class Profile(models.Model):
     GENDERS = [
         ('male', 'Male'),
@@ -52,6 +58,8 @@ class Profile(models.Model):
         ('prefer_not_to_say', 'Prefer not to say')
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    address = models.TextField()
+    phone_number = PhoneField()
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     gender = models.CharField(max_length=20, choices=GENDERS, default='------')
     date_of_birth = models.DateField(null=True, blank=True)

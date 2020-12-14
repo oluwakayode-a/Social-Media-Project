@@ -2256,7 +2256,7 @@ a.navbar-brand:hover {
   -moz-background-size: cover;
   -o-background-size: cover;
   color: #fff;
-  height: 100vh;
+  height: 100%;
   width: 100%;
 }
 
@@ -2345,11 +2345,4 @@ a.navbar-brand:hover {
 .btn-dark:active {
     color: #fff !important;
     background-color: rgba(0,0,0,0.7);
-}
-
-@media (max-width: 768px){
-	.login {
-	  height: 130vh;
-	  width: 100%;
-	}
 }

@@ -13,5 +13,6 @@ urlpatterns = [
     path('edit_interests/', views.edit_interests, name='edit_interests'),
     path('followers/', views.followers, name='followers'),
     path('following/', views.following, name='following'),
+    path('delete_post/<int:id>/', views.delete_post, name='delete_post'),
     path('logout/', LogoutView.as_view(), name='logout'),
 ]

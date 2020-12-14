@@ -214,7 +214,8 @@ def search(request):
         users = users.filter(
             Q(username__icontains=query) |
             Q(first_name__icontains=query) |
-            Q(last_name__icontains=query)
+            Q(last_name__icontains=query) |
+            Q(full_name__icontains=query)
         ).distinct()
 
     context = {

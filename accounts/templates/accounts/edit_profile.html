@@ -10,7 +10,7 @@
     <div class="banner-content">
 
       <h1><i class="fa fa-smile"></i> Earthruh</h1>
-      <form method="post" class="form-signin" enctype="multipart/form-data">
+      <form method="post" data-toggle="validator" class="form-signin" enctype="multipart/form-data" id="profile-form">
         {% csrf_token %}
         <h3 class="form-signin-heading">Edit Profile</h3>
         {% bootstrap_form user_form %}
@@ -18,9 +18,44 @@
         <button class="kafe-btn kafe-btn-mint btn-block" type="submit" name="subm">Save Changes</button>
         <br />
       </form>
+      <p id="size"></p>
 
     </div>
     <!--/. banner-content -->
   </div><!-- /.container -->
 </section>
+
+<style>
+  #id_phone_number_1 {
+    display: none;
+  }
+
+  .phone-field-ext {
+    display: none;
+  }
+</style>
+
+<script> 
+    document.getElementById('profile-form').addEventListener('submit', e => {
+          e.preventDefault()
+          let fi = document.getElementById('id_profile_pic'); 
+          // Check if any file is selected. 
+          if (fi.files.length > 0) { 
+              for (const i = 0; i <= fi.files.length - 1; i++) { 
+
+                  const fsize = fi.files.item(i).size; 
+                  const file = Math.round((fsize / 1024)); 
+                  // The size of the file. 
+                  if (file >= 4096) { 
+                      alert( 
+                        "Profile Pic too large, please select a file less than 4mb"); 
+                  } 
+                  else { 
+                      document.getElementById('profile-form').submit(); 
+                  } 
+              } 
+          } 
+      } 
+  )
+</script>
 {% endblock %}

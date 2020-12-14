@@ -68,6 +68,13 @@ def profile(request):
 
 
 @login_required
+def delete_post(request, id):
+    post = get_object_or_404(Post, id=id)
+    post.delete()
+
+    return redirect('accounts:profile')
+
+@login_required
 def user(request, user):
     user = User.objects.get(username=user)
     if user == request.user:
@@ -121,7 +128,7 @@ def edit_profile(request):
     if user_form.is_valid() and profile_form.is_valid:
         user_form.save()
         profile_form.save()
-        return redirect('main:index')
+        return redirect('accounts:profile')
     context = {
         'user_form' : user_form,
         'profile_form' : profile_form

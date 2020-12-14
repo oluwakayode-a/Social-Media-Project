@@ -180,7 +180,6 @@
 						<div class="explore-top">
 							<div class="explore-like"><i class="fa fa-heart"></i> <span>{{ post.like_count }}</span>
 							</div>
-							<div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
 						</div>
 						<div class="explore-body">
 							
@@ -211,7 +210,7 @@
 <!-- ==============================================
 	 Modal Section
 	 =============================================== -->
-	 <section id="modal">
+	<section id="modal">
 		{% for post in posts %}
 		<div id="Modal{{ post.id }}" class="modal fade">
 			<div class="modal-dialog">
@@ -222,7 +221,10 @@
 		
 							<div class="col-md-8 modal-image">
 								<img class="img-responsive" src="{{ post.image.url }}" alt="Image" />
-							</div>
+								{% if post.user == request.user %}
+								<a href="{% url 'accounts:delete_post' post.id %}" class="btn btn-danger" style="margin-top: 10px;">Delete Post</button>
+								{% endif %}
+								</div>
 							<!--/ col-md-8 -->
 							<div class="col-md-4 modal-meta">
 								<div class="modal-meta-top">

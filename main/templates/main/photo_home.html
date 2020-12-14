@@ -143,12 +143,11 @@
 
 				<div class="cardbox-item">
 					<div class="container-fluid">
+						<p>{{ post.caption }}</p>
 						{% if post.event %}
 						<p>Event</p>
-						<p>{{ post.event_url }}</p>
+						<a href="{{ post.event_url }}" target="_blank" style="color: #0fc19e;">{{ post.event_url }}</a>
 						<p>{{ post.venue }}</p>
-						{% else %}
-						<p>{{ post.caption }}</p>
 						{% endif %}
 					</div>
 					<a href="#Modal{{ post.id }}" data-toggle="modal">
@@ -159,11 +158,17 @@
 				<div class="cardbox-base">
 					<ul id="like-images-{{ post.id }}">
 						{% for like in post.likes.all %}
-							{% if like.user.profile.profile_pic %}
+							
 							<li id="like-image-{{ like.user.id }}">
-								<a href="#"><img src="{{ like.user.profile.profile_pic.url }}" class="img-responsive img-circle"
-										alt="User"></a></li>
-							{% endif %}
+								<a href="#">
+									{% if like.user.profile.profile_pic %}
+									<img src="{{ like.user.profile.profile_pic.url }}" class="img-responsive img-circle"
+										alt="User">
+									{% else %}
+									<img src="/static/img/user.png/" class="img-responsive img-circle"
+										alt="User">
+									{% endif %}
+								</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -181,7 +186,7 @@
 							</a>
 						<span id="likes-{{ post.id }}"> {{ post.like_count }}</span></li>
 						<li><a href="#Modal{{ post.id }}" data-toggle="modal" class="com"><i class="fa fa-comments"></i></a> <span
-								class="span-last"> {{ post.comment_count }}</span></li>						
+								class="span-last" id="post-comment-count-{{ post.id }}"> {{ post.comment_count }}</span></li>						
 					</ul>
 				</div>
 				<!--/ cardbox-like -->
@@ -270,7 +275,7 @@
 												></i></a>
 												<span
 													class="modal-one"> {{ post.like_count }}</span> |
-												<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
+												<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span id="modal-comment-count-{{ post.id }}">
 													{{ post.comment_count }}</span> </li>
 											<li>
 												<span class="thumb-xs">

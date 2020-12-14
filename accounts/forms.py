@@ -5,7 +5,7 @@ from .models import Profile, User
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'verified']
+        exclude = ['user', 'verified', 'notification_count']
 
 
 # class InterestForm(forms.ModelForm):
