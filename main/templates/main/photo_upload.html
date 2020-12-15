@@ -13,7 +13,7 @@
 					<form method="POST" enctype="multipart/form-data">
 						{% csrf_token %}
 						<textarea class="form-control no-border" rows="3" placeholder="Photo caption..."
-							name="caption" required maxlength="100" id="text"></textarea>
+							name="caption" required id="text"></textarea>
 						<span class="pull-right label label-default" id="count_message"></span>
 						<div class="box-footer clearfix">
 							<ul class="nav nav-pills nav-sm">
@@ -215,13 +215,16 @@
 	let text_max = 100;
 	$('#count_message').html('0 / ' + text_max );
 	$('#text').keyup(function(e) {
-		if (this.value.length > text_max) {
-			this.value = this.value.subString(0, text_max)
-		}
 		var text_length = $('#text').val().length;
 		var text_remaining = text_max - text_length;
 		
-		$('#count_message').html(text_length + ' / ' + text_max);
+		if (this.value.length > text_max) {
+			this.value = this.value.substr(0, text_max)
+			e.preventDefault()
+			return false;
+		} else {
+			$('#count_message').html(text_length + ' / ' + text_max);
+		}
 	});
 
 	let el = $('#upload');
