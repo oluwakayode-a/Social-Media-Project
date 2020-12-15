@@ -67,7 +67,7 @@
                   -moz-background-size: cover;
                   -o-background-size: cover;">
 						<div class="explore-top">
-							<div class="explore-like"><i class="fa fa-heart"></i> <span>{{ post.like_count }}</span></div>
+							<div class="explore-like"><i class="fa fa-heart"></i> <span id="card-like-count-{{ post.id }}">{{ post.like_count }}</span></div>
 							<div class="explore-circle pull-right"><i class="far fa-bookmark"></i></div>
 						</div>
 						<div class="explore-body">
@@ -119,9 +119,7 @@
 										{% if post.user.profile.profile_pic %}
 										<a href=""><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
 												alt="Image" /></a>
-										{% else %}
-										<a href=""><img class="img-responsive img-circle" src="/static/img/user.png/"
-											alt="Image" /></a>
+										
 										{% endif %}
 										<strong><a href="">{{ post.user.get_full_name }}</a></strong>
 										<span>{{ post.created | timesince }} ago</span><br />
@@ -142,12 +140,10 @@
 										{% for comment in post.comments.all %}
 										<li>
 											<div class="comment-img">
-												{% if comment.user.profile.profile_pic %}
+												{% if comment.user.profile.profile_pic. %}
 												<img src="{{ comment.user.profile.profile_pic.url }}" class="img-responsive img-circle"
 													alt="Image" />
-												{% else %}
-												<img src="/static/img/user.png" class="img-responsive img-circle"
-													alt="Image" />
+												
 												{% endif %}
 											</div>
 											<div class="comment-text">
@@ -162,23 +158,23 @@
 		
 									<div class="modal-meta-bottom">
 										<ul>
-											<li><a 
-												class="modal-like"
-												
-												{% if post|has_liked:request.user %} style="color:#e16a70" 
-												{% else %} style="color:#b2b2b2" 
-												{% endif %}><i class="fa fa-heart"></i></a>
+											<li><a class="modal-like"
+												{% if post|has_liked:request.user %} style="color:#e16a70; cursor: pointer;" 
+												{% else %} style="color:#b2b2b2; cursor: pointer;"
+												{% endif %} 
+												@click.prevent="toggleLike({{ post.id }})">
+													<i
+													class="fa fa-heart"></i>
+												</a>
 												<span
-													class="modal-one"> {{ post.like_count }}</span> |
-												<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
+													class="modal-one" id="modal-likes-{{ post.id }}"> {{ post.like_count }}</span> |
+												<a class="modal-comment"><i class="fa fa-comments"></i></a>
+												<span id="modal-comment-count-{{ post.id }}">
 													{{ post.comment_count }}</span> </li>
 											<li>
 												<span class="thumb-xs">
 													{% if request.user.profile.profile_pic %}
 													<img class="img-responsive img-circle" src="{{ request.user.profile.profile_pic.url }}"
-														alt="Image">
-													{% else %}
-													<img class="img-responsive img-circle" src="/static/img/user.png/"
 														alt="Image">
 													{% endif %}
 												</span>

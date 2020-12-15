@@ -4,6 +4,7 @@ from .models import Profile, UserFollowing
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .forms import ProfileForm, EditUser
+from django.contrib import messages
 from main.models import Notification, Post
 
 User = get_user_model()
@@ -71,6 +72,8 @@ def profile(request):
 def delete_post(request, id):
     post = get_object_or_404(Post, id=id)
     post.delete()
+
+    messages.success(request, 'Post deleted.')
 
     return redirect('accounts:profile')
 

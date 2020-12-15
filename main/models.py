@@ -20,7 +20,7 @@ class Post(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORIES, default="art")
 
     def __str__(self):
-        return self.caption
+        return f"post-{self.id}"
     
 
     @property
@@ -66,6 +66,9 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.text
+    
+    class Meta:
+        ordering = ['-created']
 
 class Suggestion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

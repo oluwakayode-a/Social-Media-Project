@@ -16,9 +16,11 @@
 								<div class="followers-body">
 									{% if user.profile.profile_pic %}
 									<img class="img-responsive img-circle" src="{{ user.profile.profile_pic.url }}" alt="">
+									{% else %}
+									<img class="img-responsive img-circle" src="/static/img/user.png/" alt="">
 									{% endif %}
 									<div class="name-box">
-										<h4>{{ user.get_full_name }}</h4>
+										<a href="{% url 'accounts:user' user.username %}"><h4>{{ user.get_full_name }}</h4></a>
 										<span>@{{ user.username }}</span>
 										
 										<!--/ followers-base -->

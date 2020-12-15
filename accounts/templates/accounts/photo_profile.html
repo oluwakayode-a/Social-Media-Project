@@ -178,7 +178,7 @@
                   -moz-background-size: cover;
                   -o-background-size: cover;">
 						<div class="explore-top">
-							<div class="explore-like"><i class="fa fa-heart"></i> <span>{{ post.like_count }}</span>
+							<div class="explore-like"><i class="fa fa-heart"></i> <span id="card-like-count-{{ post.id }}">{{ post.like_count }}</span>
 							</div>
 						</div>
 						<div class="explore-body">
@@ -197,6 +197,7 @@
 					</div>
 				</a>
 			</div>
+
 			<!--/ col-lg-4 -->
 			{% endfor %}
 		</div>
@@ -222,9 +223,21 @@
 							<div class="col-md-8 modal-image">
 								<img class="img-responsive" src="{{ post.image.url }}" alt="Image" />
 								{% if post.user == request.user %}
-								<a href="{% url 'accounts:delete_post' post.id %}" class="btn btn-danger" style="margin-top: 10px;">Delete Post</button>
-								{% endif %}
+								<div class="dropdown">
+									<button data-toggle="dropdown" class="btn btn-danger" style="margin-top: 10px;">
+										Delete
+										<span class="caret"></span>
+									</button>
+
+									<ul class="dropdown-menu">
+										<li>
+											<a>Are you sure?</a>
+										</li>
+										<li><a href="{% url 'accounts:delete_post' post.id %}" class="btn btn-danger">Yes</a></li>
+									</ul>
 								</div>
+								{% endif %}
+							</div>
 							<!--/ col-md-8 -->
 							<div class="col-md-4 modal-meta">
 								<div class="modal-meta-top">
@@ -233,17 +246,11 @@
 									</button>
 									<!--/ button -->
 									<div class="img-poster clearfix">
+										{% if post.user.profile.profile_pic %}
+										<a href=""><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
+												alt="Image" /></a>
 										
-										<a href="">
-											{% if post.user.profile.profile_pic %}
-											<img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
-												alt="Image" />
-											{% else %}
-											<img class="img-responsive img-circle" src="/static/img/user.png"
-												alt="Image" />
-											{% endif %}
-										</a>
-										
+										{% endif %}
 										<strong><a href="">{{ post.user.get_full_name }}</a></strong>
 										<span>{{ post.created | timesince }} ago</span><br />
 										{% is_following request.user post.user.id as user_is_following %}
@@ -266,9 +273,6 @@
 												{% if comment.user.profile.profile_pic. %}
 												<img src="{{ comment.user.profile.profile_pic.url }}" class="img-responsive img-circle"
 													alt="Image" />
-												{% else %}
-												<img src="/static/img/user.png" class="img-responsive img-circle"
-													alt="Image" />
 												
 												{% endif %}
 											</div>
@@ -284,23 +288,23 @@
 		
 									<div class="modal-meta-bottom">
 										<ul>
-											<li><a 
-												class="modal-like"
-												
-												{% if post|has_liked:request.user %} style="color:#e16a70" 
-												{% else %} style="color:#b2b2b2" 
-												{% endif %}><i class="fa fa-heart"></i></a>
+											<li><a class="modal-like"
+												{% if post|has_liked:request.user %} style="color:#e16a70; cursor: pointer;" 
+												{% else %} style="color:#b2b2b2; cursor: pointer;"
+												{% endif %} 
+												@click.prevent="toggleLike({{ post.id }})">
+													<i
+													class="fa fa-heart"></i>
+												</a>
 												<span
-													class="modal-one"> {{ post.like_count }}</span> |
-												<a class="modal-comment" href="#"><i class="fa fa-comments"></i></a><span>
+													class="modal-one" id="modal-likes-{{ post.id }}"> {{ post.like_count }}</span> |
+												<a class="modal-comment"><i class="fa fa-comments"></i></a>
+												<span id="modal-comment-count-{{ post.id }}">
 													{{ post.comment_count }}</span> </li>
 											<li>
 												<span class="thumb-xs">
 													{% if request.user.profile.profile_pic %}
 													<img class="img-responsive img-circle" src="{{ request.user.profile.profile_pic.url }}"
-														alt="Image">
-													{% else %}
-													<img class="img-responsive img-circle" src="/static/img/user.png/"
 														alt="Image">
 													{% endif %}
 												</span>

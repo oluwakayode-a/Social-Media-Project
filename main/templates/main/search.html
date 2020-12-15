@@ -98,22 +98,38 @@
 			<div class="cardbox">
 
 				<div class="cardbox-heading">
+					<div class="dropdown pull-right">
+						<button class="btn btn-secondary btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="true">
+						 	<em class="fa fa-ellipsis-h"></em>
+						</button>
+						<div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
+							<a class="dropdown-item"
+								target="_blank"
+								href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}post/{{ post.id }}">Share on Facebook</a>
+							<a class="dropdown-item"
+								target="_blank" 
+								href="https://twitter.com/intent/tweet?text={{ request.build_absolute_uri }}post/{{ post.id }}">Share on Twitter</a>
+							<a class="dropdown-item"
+								target="_blank"
+								href="whatsapp://send?text={{ request.build_absolute_uri }}post/{{ post.id }}" data-action="share/whatsapp/share">Share on WhatsApp</a>
+							
+							{% if not post.user == request.user %}
+							<a class="dropdown-item" href="{% url 'main:report' post.id %}">Report</a>
+							{% endif %}
+						</div>
+					</div>
 					<div class="media m-0">
 						<div class="d-flex mr-3">
-							
-							<a href="#">
-								{% if post.user.profile.profile_pic %}
-								<img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
-									alt="User">
-								{% else %}
-								<img class="img-responsive img-circle" src="/static/img/user.png/"
-									alt="User">
-								{% endif %}
-							</a>
-							
+							{% if post.user.profile.profile_pic %}
+							<a href="{% url 'accounts:user' post.user.username %}"><img class="img-responsive img-circle" src="{{ post.user.profile.profile_pic.url }}"
+									alt="User"></a>
+							{% else %}
+							<a href="{% url 'accounts:user' post.user.username %}"><img class="img-responsive img-circle" src="/static/img/arrow.png"
+									alt="User"></a>
+							{% endif %}
 						</div>
 						<div class="media-body">
-							<p class="m-0">{{ post.user.get_full_name }}</p>
+							<a href="{% url 'accounts:user' post.user.username %}"><p class="m-0">{{ post.user.get_full_name }}</p></a>
 							<small><span>{{ post.created | timesince }} ago</span></small>
 						</div>
 					</div>
@@ -122,27 +138,33 @@
 				<!--/ cardbox-heading -->
 
 				<div class="cardbox-item">
+					<div class="container-fluid">
+						<p>{{ post.caption }}</p>
+						{% if post.event %}
+						<p>Event</p>
+						<a href="{{ post.event_url }}" target="_blank" style="color: #0fc19e;">{{ post.event_url }}</a>
+						<p>{{ post.venue }}</p>
+						{% endif %}
+					</div>
 					<a href="#Modal{{ post.id }}" data-toggle="modal">
-						<img class="img-responsive" src="{{ post.image.url }}" alt="MaterialImg">
+						<img class="img-responsive" src="{{ post.image.url }}" alt="MaterialImg"  style="width: 100%;">
 					</a>
 				</div>
 				<!--/ cardbox-item -->
 				<div class="cardbox-base">
-					<ul>
+					<ul id="like-images-{{ post.id }}">
 						{% for like in post.likes.all %}
-						
-						<li>
-							<a href="#">
-								{% if like.user.profile.profile_pic %}
-								<img src="{{ like.user.profile.profile_pic.url }}" class="img-responsive img-circle"
-									alt="User">
-								{% else %}
-								<img src="/static/img/user.png" class="img-responsive img-circle"
-									alt="User">
-								{% endif %}
-							</a>
-						</li>
-						
+							
+							<li id="like-image-{{ like.user.id }}">
+								<a href="#">
+									{% if like.user.profile.profile_pic %}
+									<img src="{{ like.user.profile.profile_pic.url }}" class="img-responsive img-circle"
+										alt="User">
+									{% else %}
+									<img src="/static/img/user.png/" class="img-responsive img-circle"
+										alt="User">
+									{% endif %}
+								</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -160,7 +182,7 @@
 							</a>
 						<span id="likes-{{ post.id }}"> {{ post.like_count }}</span></li>
 						<li><a href="#Modal{{ post.id }}" data-toggle="modal" class="com"><i class="fa fa-comments"></i></a> <span
-								class="span-last"> {{ post.comment_count }}</span></li>						
+								class="span-last" id="post-comment-count-{{ post.id }}"> {{ post.comment_count }}</span></li>						
 					</ul>
 				</div>
 				<!--/ cardbox-like -->

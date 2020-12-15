@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 from accounts.models import Profile, UserFollowing
-from django.db.models import Q
+from django.db.models import Q, Count
 from .models import Post, Like, Comment, Notification
 from .forms import SuggestionForm, ReportForm
 from django.contrib.auth.decorators import login_required
@@ -50,6 +51,8 @@ def report(request, id):
         form.instance.post = post
         form.instance.user = request.user
         form.save()
+
+        messages.success(request, 'Your report has been submitted.')
 
         return redirect('main:index')
 
@@ -121,19 +124,20 @@ def like_toggle(request):
         )
         new_like.save()
 
-         # create new notification
-        new_notification = Notification.objects.create(
-            user=post.user,
-            user_from=request.user,
-            post=post,
-            notification_type='heart',
-            text=f'{request.user.get_full_name()} liked your post'
-        )
-        new_notification.save()
-        
-        # Increment notification count
-        request.user.profile.notification_count += 1
-        request.user.profile.save()
+
+         # create new notification if not logged in user
+        if post.user != request.user:
+            new_notification = Notification.objects.create(
+                user=post.user,
+                user_from=request.user,
+                post=post,
+                notification_type='heart',
+                text=f'{request.user.get_full_name()} liked your post'
+            )
+            new_notification.save()
+            # Increment notification count
+            request.user.profile.notification_count += 1
+            request.user.profile.save()
     
     response = {'success' : True}
 
@@ -175,13 +179,14 @@ def upload(request):
                 category=category
             )
             new_post.save()
+        messages.success(request, 'Post successfully uploaded.')
         return redirect('main:index')
     return render(request, 'main/photo_upload.html')
 
 
 @login_required
 def explore(request):
-    posts = Post.objects.all()
+    posts = Post.objects.annotate(count=Count('likes')).order_by('-count')
     # isolate all user ids of users followed by currently logged in user
     excluded = [user.following_user_id.id for user in request.user.following.all()]
 
@@ -234,6 +239,7 @@ def suggestion(request):
         form.instance.user = request.user
         form.save()
 
+        messages.success(request, 'Your suggestion has been submitted.')
         return redirect('main:index')
     
     context = {
