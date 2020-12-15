@@ -214,7 +214,11 @@
 <script>
 	let text_max = 100;
 	$('#count_message').html('0 / ' + text_max );
-	$('#text').keyup(function() {
+	$('#text').keyup(function(e) {
+		if(this.value.length == 100 && e.keyCode != 8) {
+			e.preventDefault();
+			return false
+		}
 		var text_length = $('#text').val().length;
 		var text_remaining = text_max - text_length;
 		
