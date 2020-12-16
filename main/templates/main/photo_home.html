@@ -142,9 +142,14 @@
 					<div class="container-fluid">
 						<p style="word-wrap: break-word;">{{ post.caption }}</p>
 						{% if post.event %}
-						<p>Event</p>
-						<a href="{{ post.event_url }}" target="_blank" style="color: #0fc19e;">{{ post.event_url }}</a>
-						<p>{{ post.venue }}</p>
+						<p>
+							Event URL <br>
+							<a href="{{ post.event_url }}" target="_blank" style="color: #0fc19e;">{{ post.event_url }}</a>
+						</p>
+						<p>
+							Event Venue <br>
+							<span>{{ post.venue }}</span>
+						</p>
 						{% endif %}
 					</div>
 					<a href="#Modal{{ post.id }}" data-toggle="modal">
