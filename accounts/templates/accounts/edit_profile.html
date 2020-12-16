@@ -9,7 +9,7 @@
   <div class="container">
     <div class="banner-content">
 
-      <h1><i class="fa fa-smile"></i> Earthruh</h1>
+      <a href="/"><h1><i class="fa fa-smile"></i> Earthruh</h1></a>
       <form method="post" data-toggle="validator" class="form-signin" enctype="multipart/form-data" id="profile-form">
         {% csrf_token %}
         <h3 class="form-signin-heading">Edit Profile</h3>
@@ -24,6 +24,16 @@
     <!--/. banner-content -->
   </div><!-- /.container -->
 </section>
+
+<style>
+  .phone-field-ext {
+    display: none;
+  }
+
+  #id_phone_number_1 {
+    display: none;
+  }
+</style>
 
 <script> 
     document.getElementById('profile-form').addEventListener('submit', e => {

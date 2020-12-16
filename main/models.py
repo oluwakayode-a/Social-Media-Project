@@ -22,6 +22,8 @@ class Post(models.Model):
     def __str__(self):
         return f"post-{self.id}"
     
+    def get_absolute_url(self):
+        return f"/post/{self.id}/"
 
     @property
     def like_count(self):

@@ -40,10 +40,15 @@
 									class="slider round"></span></label>
 							<div id="EventInfo" style="display: none;">
 								<label class="EventUrl" for="url-type-styled-input">Event URL<span class="aux"></span></label>
-								<input type="url" id="url-type-styled-input" name="event-url">
+								<input 
+									type="url"
+									oninvalid="this.setCustomValidity('Invalid URL. Please add http:// or https://')" 
+									id="url-type-styled-input" 
+									name="event-url">
 	
 								<label for="vname">Venue</label>
 								<input class="Venue" type="text" id="venue" name="venue" placeholder="Your Venue..">
+								<span class="pull-right label label-default" id="count_venue"></span>
 							</div>
 						</div>
 
@@ -123,11 +128,12 @@
     			resize: none;
 			}
 
-			#count_message {
+			#count_message, #count_venue {
 				background-color: smoke;
-				margin-top: -20px;
+				margin-top: -5px;
 				margin-right: 5px;
 			}
+			
 		</style>
 
 		<!-- Rounded switch -->
@@ -224,6 +230,20 @@
 			return false;
 		} else {
 			$('#count_message').html(text_length + ' / ' + text_max);
+		}
+	});
+
+	$('#count_venue').html('0 / ' + text_max );
+	$('#venue').keyup(function(e) {
+		var text_length = $('#venue').val().length;
+		var text_remaining = text_max - text_length;
+		
+		if (this.value.length > text_max) {
+			this.value = this.value.substr(0, text_max)
+			e.preventDefault()
+			return false;
+		} else {
+			$('#count_venue').html(text_length + ' / ' + text_max);
 		}
 	});
 
