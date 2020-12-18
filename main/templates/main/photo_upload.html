@@ -219,7 +219,7 @@
 
 {% block extra_scripts %}
 <script>
-	let text_max = 100;
+	let text_max = 500;
 	$('#count_message').html('0 / ' + text_max );
 	$('#text').keyup(function(e) {
 		var text_length = $('#text').val().length;
@@ -234,17 +234,18 @@
 		}
 	});
 
-	$('#count_venue').html('0 / ' + text_max );
+	let text_max_venue = 100;
+	$('#count_venue').html('0 / ' + text_max_venue );
 	$('#venue').keyup(function(e) {
 		var text_length = $('#venue').val().length;
-		var text_remaining = text_max - text_length;
+		var text_remaining = text_max_venue - text_length;
 		
-		if (this.value.length > text_max) {
-			this.value = this.value.substr(0, text_max)
+		if (this.value.length > text_max_venue) {
+			this.value = this.value.substr(0, text_max_venue)
 			e.preventDefault()
 			return false;
 		} else {
-			$('#count_venue').html(text_length + ' / ' + text_max);
+			$('#count_venue').html(text_length + ' / ' + text_max_venue);
 		}
 	});
 

@@ -105,6 +105,16 @@
   <script src="{% static 'js/base.js' %}"></script>
   <script>
     $('#id_date_of_birth').attr("type", "date");
+    $(document).ready(function () {
+    let websiteEl = $('#id_website');
+
+    websiteEl.attr(
+    {
+      oninvalid : "this.setCustomValidity('Invalid URL. Please add http:// or https://')",
+      onkeyup: "this.setCustomValidity('')"
+      }
+    )  
+  })
   </script>
 
   </body>

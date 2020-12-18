@@ -190,8 +190,11 @@ def explore(request):
     # isolate all user ids of users followed by currently logged in user
     excluded = [user.following_user_id.id for user in request.user.following.all()]
 
-    # list all users not followed by logged in user.
-    suggested = User.objects.exclude(id__in=excluded).exclude(username=request.user.username)
+    # list top 5 users with highest followers and exclude those already followed by logged in user.
+    suggested = User.objects.exclude(id__in=excluded)\
+                .exclude(username=request.user.username)\
+                .annotate(count=Count('follwers'))\
+                .order_by('-count')[:5]
 
     context = {
         'posts' : posts,
