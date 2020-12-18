@@ -193,7 +193,7 @@ def explore(request):
     # list top 5 users with highest followers and exclude those already followed by logged in user.
     suggested = User.objects.exclude(id__in=excluded)\
                 .exclude(username=request.user.username)\
-                .annotate(count=Count('follwers'))\
+                .annotate(count=Count('followers'))\
                 .order_by('-count')[:5]
 
     context = {
