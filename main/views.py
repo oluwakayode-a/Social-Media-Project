@@ -102,6 +102,10 @@ def add_comment(request):
             notification_type='comment'
         )
         new_notification.save()
+        
+        # increment notification count of users.
+        user.profile.notification_count += 1
+        user.profile.save()
 
     response = {'success' : True}
 
@@ -136,8 +140,8 @@ def like_toggle(request):
             )
             new_notification.save()
             # Increment notification count
-            request.user.profile.notification_count += 1
-            request.user.profile.save()
+            post.user.profile.notification_count += 1
+            post.user.profile.save()
     
     response = {'success' : True}
 

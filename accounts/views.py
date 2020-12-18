@@ -43,6 +43,8 @@ def follow(request, target_id):
             text=f'{request.user.get_full_name()} followed you'
         )
         new_notification.save()
+        user_to_follow.profile.notification_count += 1
+        user_to_follow.profile.save()
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
