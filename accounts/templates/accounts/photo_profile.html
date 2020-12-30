@@ -228,6 +228,9 @@
 										Delete
 										<span class="caret"></span>
 									</button>
+									<a href="{% url 'main:edit_post' post.id %}" class="btn btn-primary" style="margin-top: 10px;">
+										Edit Post
+									</a>
 
 									<ul class="dropdown-menu">
 										<li>
@@ -268,7 +271,7 @@
 		
 									<ul class="img-comment-list" id="comment-list-{{ post.id }}">
 										{% for comment in post.comments.all %}
-										<li>
+										<li id="comment-{{ comment.id }}">
 											<div class="comment-img">
 												{% if comment.user.profile.profile_pic. %}
 												<img src="{{ comment.user.profile.profile_pic.url }}" class="img-responsive img-circle"
@@ -279,6 +282,7 @@
 											<div class="comment-text">
 												<strong><a href="">{{ comment.user.get_full_name }}</a></strong>
 												<p>{{ comment.text }}</p> <span class="date sub-text">on {{ comment.created }}</span>
+												<a href="" @click.prevent="deleteComment({{ comment.id }})"><i class="fa fa-trash"></i></a>
 											</div>
 										</li>
 										{% endfor %}

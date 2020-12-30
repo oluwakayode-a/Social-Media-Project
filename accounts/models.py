@@ -5,8 +5,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phone_field import PhoneField
 import main.models
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedDateField, EncryptedTextField, EncryptedMixin
 
 # Create your models here.
+class EncryptedPhoneField(EncryptedMixin, PhoneField):
+    pass
+
 class User(AbstractUser):
     full_name = models.CharField(max_length=1000)
 
@@ -58,11 +62,11 @@ class Profile(models.Model):
         ('prefer_not_to_say', 'Prefer not to say')
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    address = models.TextField()
-    phone_number = PhoneField()
+    address = EncryptedTextField()
+    phone_number = EncryptedPhoneField()
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     gender = models.CharField(max_length=20, choices=GENDERS, default='------')
-    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_birth = EncryptedDateField(null=True, blank=True)
     # interests = models.ForeignKey(Interest, on_delete=models.CASCADE, related_name='profile', null=True, blank=True)
     website = models.URLField(default='', blank=True)
     bio = models.CharField(max_length=170, default="", blank=True)

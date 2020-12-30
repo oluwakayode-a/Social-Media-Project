@@ -1,4 +1,4 @@
-from .models import Suggestion, Report
+from .models import Suggestion, Report, Inquiry
 from django import forms
 
 class SuggestionForm(forms.ModelForm):

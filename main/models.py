@@ -73,8 +73,12 @@ class Notification(models.Model):
         ordering = ['-created']
 
 class Suggestion(models.Model):
+    CHOICES = [
+        ('bug_report', 'Bug Report'),
+        ('improvement', 'Improvement'),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=300)
+    category = models.CharField(max_length=10, choices=CHOICES)
     text = models.TextField()
 
     def __str__(self):
@@ -89,4 +93,28 @@ class Report(models.Model):
 
     def __str__(self):
         return f"Report on {self.post} by {self.user}"
+
+
+class Inquiry(models.Model):
+    REASON = [
+        ('buy', 'Buy'),
+        ('customize_work', 'Customize Work'),
+        ('booking', 'Booking'),
+        ('exhibition', 'Exhibition'),
+        ('event', 'Event')
+    ]
+    reason = models.CharField(max_length=50, choices=REASON)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    phone_number = models.TextField()
+    address = models.CharField(max_length=1000)
+    city = models.CharField(max_length=200)
+    state = models.CharField(max_length=200)
+    zip_code = models.CharField(max_length=10)
+    country = models.CharField(max_length=50)
+    message = models.TextField()
+
+    def __str__(self):
+        return f"Inquiry by {self.first_name} {self.last_name}"
     

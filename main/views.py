@@ -4,11 +4,16 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from accounts.models import Profile, UserFollowing
 from django.db.models import Q, Count
-from .models import Post, Like, Comment, Notification
+from .models import Post, Like, Comment, Notification, Inquiry
 from .forms import SuggestionForm, ReportForm
 from django.contrib.auth.decorators import login_required
 import json
-
+from PIL import Image, ImageDraw, ImageFont
+from django.core.files.uploadhandler import InMemoryUploadedFile
+from io import BytesIO
+import sys
+from django.core.mail import send_mail
+from django.conf import settings
 
 User = get_user_model()
 # Create your views here.
@@ -107,9 +112,25 @@ def add_comment(request):
         user.profile.notification_count += 1
         user.profile.save()
 
+    response = {'success' : True, 'new_comment_id' : new_comment.id}
+
+    return JsonResponse(response)
+
+
+@login_required
+def delete_comment(request):
+    data = json.loads(request.body)
+    comment_id = data['comment_id']
+
+    comment = Comment.objects.get(id=comment_id)
+    comment.delete()
+
     response = {'success' : True}
 
     return JsonResponse(response)
+
+
+
 
 @login_required
 def like_toggle(request):
@@ -148,6 +169,31 @@ def like_toggle(request):
     return JsonResponse(response)
 
 
+def watermark_image(image):
+    image_to_watermark = Image.open(image)
+    width, height = image_to_watermark.size
+    draw = ImageDraw.Draw(image_to_watermark)
+    text = "Earthruh"
+
+    font = ImageFont.truetype('arial.ttf', 36)
+    textwidth, textheight = draw.textsize(text, font)
+
+    # calculate the x,y coordinates of the text
+    margin = 10
+    x = width - textwidth - margin
+    y = height - textheight - margin
+
+    # draw watermark in the bottom right corner
+    draw.text((x, y), text, font=font)
+    output = BytesIO()
+    image_to_watermark.save(output, format='PNG')
+    output.seek(0)
+    watermarked_image = InMemoryUploadedFile(
+        output, 'ImageField', image.name, 'image/png', sys.getsizeof(output), None)
+    image_to_watermark.show()
+
+    return watermarked_image
+
 @login_required
 def upload(request):
     if request.method == 'POST':
@@ -163,6 +209,9 @@ def upload(request):
             venue = request.POST['venue']
         except:
             pass
+            
+        # Add watermark to image
+        image = watermark_image(image)
         
         if event:
             new_post = Post.objects.create(
@@ -186,6 +235,48 @@ def upload(request):
         messages.success(request, 'Post successfully uploaded.')
         return redirect('main:index')
     return render(request, 'main/photo_upload.html')
+
+def edit_post(request, id):
+    post = Post.objects.get(id=id)
+    if request.method == 'POST':
+        caption = request.POST['caption']
+        category = request.POST['category']
+
+        event = None
+        event_url = None
+        image = None
+
+        try:
+            event = request.POST['event-check']
+            event_url = request.POST['event-url']
+            venue = request.POST['venue']
+        except:
+            pass
+        try:
+            # Add watermark to image
+            image = watermark_image(request.FILES['file-input'])
+        except:
+            image = post.image
+
+        if event:
+            post.caption = caption
+            post.image = image
+            post.category = category
+            post.event = True
+            post.event_url = event_url
+            post.venue = venue
+        else:
+            post.event = False
+            post.event_url = ''
+            post.venue = ''
+            post.caption = caption
+            post.image = image
+            post.category = category
+        
+        post.save()
+        messages.success(request, 'Post successfully edited.')
+        return redirect('accounts:profile')
+    return render(request, 'main/edit_post.html', {'post' : post})
 
 
 @login_required
@@ -254,3 +345,44 @@ def suggestion(request):
     }
     return render(request, 'main/suggestion.html', context)
 
+@login_required
+def inquiry(request):
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        reason = request.POST['reason']
+        email = request.POST['email']
+        phone_number = request.POST['phone']
+        address = request.POST['address']
+        city = request.POST['city']
+        state = request.POST['state']
+        zip_code = request.POST['zip']
+        country = request.POST['country']
+        message = request.POST['message']
+        
+        new_inquiry = Inquiry.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            reason=reason,
+            email=email,
+            phone_number=phone_number,
+            address=address,
+            city=city,
+            state=state,
+            zip_code=zip_code,
+            country=country,
+            message=message
+        )
+        new_inquiry.save()
+
+        # Send Mail
+        send_mail(
+            'Your Inquiry',
+            'Your inquiry has been received.',
+            settings.EMAIL_HOST_USER,
+            [email, 'oladipokayode0@gmail.com'],
+            fail_silently=False
+        )
+        messages.success(request, 'Your inquiry has been submitted')
+        return redirect('main:index')
+    return render(request, 'main/inquiry.html')
