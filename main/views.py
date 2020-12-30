@@ -175,7 +175,7 @@ def watermark_image(image):
     draw = ImageDraw.Draw(image_to_watermark)
     text = "Earthruh"
 
-    font = ImageFont.truetype('arial.ttf', 36)
+    font = ImageFont.load_default()
     textwidth, textheight = draw.textsize(text, font)
 
     # calculate the x,y coordinates of the text
