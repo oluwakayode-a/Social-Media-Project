@@ -117,6 +117,7 @@
 							{% if not post.user == request.user %}
 							<a class="dropdown-item" href="{% url 'main:report' post.id %}">Report</a>
 							{% endif %}
+							<a href="{% url 'main:inquiry' post.id %}" class="dropdown-item">Make Inquiry</a>
 						</div>
 					</div>
 					<div class="media m-0">

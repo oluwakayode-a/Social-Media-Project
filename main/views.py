@@ -346,7 +346,8 @@ def suggestion(request):
     return render(request, 'main/suggestion.html', context)
 
 @login_required
-def inquiry(request):
+def inquiry(request, post_id):
+    post = Post.objects.get(id=post_id)
     if request.method == 'POST':
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -361,6 +362,9 @@ def inquiry(request):
         message = request.POST['message']
         
         new_inquiry = Inquiry.objects.create(
+            post=post,
+            post_author=post.post_author.username,
+            username_of_inquirer=request.user.username,
             first_name=first_name,
             last_name=last_name,
             reason=reason,

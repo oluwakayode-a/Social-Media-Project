@@ -103,6 +103,9 @@ class Inquiry(models.Model):
         ('exhibition', 'Exhibition'),
         ('event', 'Event')
     ]
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post_author = models.CharField(max_length=100)
+    username_of_inquirer = models.CharField(max_length=100)
     reason = models.CharField(max_length=50, choices=REASON)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
@@ -118,3 +121,5 @@ class Inquiry(models.Model):
     def __str__(self):
         return f"Inquiry by {self.first_name} {self.last_name}"
     
+    class Meta:
+        verbose_name_plural = 'inquiries'

@@ -3,12 +3,12 @@ from multiselectfield import MultiSelectField
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from phone_field import PhoneField
+from phonenumber_field.modelfields import PhoneNumberField
 import main.models
 from encrypted_model_fields.fields import EncryptedCharField, EncryptedDateField, EncryptedTextField, EncryptedMixin
 
 # Create your models here.
-class EncryptedPhoneField(EncryptedMixin, PhoneField):
+class EncryptedPhoneNumberField(EncryptedMixin, PhoneNumberField):
     pass
 
 class User(AbstractUser):
@@ -63,7 +63,7 @@ class Profile(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     address = EncryptedTextField()
-    phone_number = EncryptedPhoneField()
+    phone_number = EncryptedPhoneNumberField()
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     gender = models.CharField(max_length=20, choices=GENDERS, default='------')
     date_of_birth = EncryptedDateField(null=True, blank=True)

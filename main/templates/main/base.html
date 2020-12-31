@@ -46,6 +46,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YBZCRKM4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-Y5YBZCRKM4');
+    </script>
 </head>
 
 <body>
@@ -186,7 +195,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/profile/"><span>Profile</span></a>
                                 <a class="dropdown-item" href="/suggestion/"><span>Leave a suggestion</span></a>
-                                <a class="dropdown-item" href="/inquiry/">Make an inquiry</a>
+                                <!-- <a class="dropdown-item" href="/inquiry/">Make an inquiry</a> -->
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'accounts:logout' %}">Sign out</a>
                             </div>

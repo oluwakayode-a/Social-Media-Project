@@ -17,12 +17,23 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 from . import settings
+from sitemaps import PostSitemap
+from django.contrib.sitemaps.views import sitemap
+from django.views.generic.base import TemplateView
+
+
+sitemaps = {
+    'sitemaps' : PostSitemap
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('main.urls', 'main'))),
     path('auth/', include('allauth.urls')),
     path('', include(('accounts.urls', 'accounts'))),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+     name='django.contrib.sitemaps.views.sitemap'),
+    path("robots.txt", TemplateView.as_view(template_name="main/robots.txt", content_type="text/plain")),  #add the robots.txt file
 ]
 
 urlpatterns += staticfiles_urlpatterns()

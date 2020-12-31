@@ -130,7 +130,7 @@ def edit_profile(request):
     user_form = EditUser(request.POST or None, instance=request.user)
     profile_form = ProfileForm(request.POST or None, request.FILES or None, instance=profile)
 
-    if user_form.is_valid() and profile_form.is_valid:
+    if user_form.is_valid() and profile_form.is_valid():
         user_form.save()
         profile_form.save()
         return redirect('accounts:profile')
