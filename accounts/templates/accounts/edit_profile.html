@@ -60,6 +60,10 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/8.4.7/js/intlTelInput.js"></script>
 <script>
+    $('#id_phone_number').attr({
+      "pattern" : "^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$",
+      "title" : "Invalid characters. Please remove letters."
+    })
     $("#id_phone_number").intlTelInput({
       autoHideDialCode: false,
       formatOnDisplay: true
