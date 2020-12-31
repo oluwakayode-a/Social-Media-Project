@@ -384,7 +384,7 @@ def inquiry(request, post_id):
             'Your Inquiry',
             'Your inquiry has been received.',
             settings.EMAIL_HOST_USER,
-            [email, 'oladipokayode0@gmail.com'],
+            [email, 'earthruh@gmail.com'],
             fail_silently=False
         )
         messages.success(request, 'Your inquiry has been submitted')
