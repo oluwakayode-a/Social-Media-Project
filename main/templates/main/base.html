@@ -289,19 +289,19 @@
 			data() {
 				return {
 					comment_text: '',
-                    liked_posts : [{% for post in request.user.liked_posts %} {{ post }}, {% endfor %}]
+                    liked_posts : [{% for post in request.user.liked_posts %} {{ post }}, {% endfor %}],
+                    new_comment_id: 0,
 				}
 			},
 			methods: {
 				addComment(post_id) {
-                    let new_comment_id = 0
 					let comment = {
 						'post_id' : post_id,
 						'comment_text' : this.comment_text
 					}
 
                     if (
-                        /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/.test(this.comment_text)
+                        /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)|(?<=[ ])[\d \-+()]+$|(?<=[ ])[\d \-+()]+(?=[ ]\w)/.test(this.comment_text)
                         ) {
                            document.querySelectorAll('#comment-input').forEach(el => {
                                const div = document.createElement('div')
@@ -313,6 +313,7 @@
                                el.parentElement.prepend(div)
                                console.log(el)
                            })
+                           setTimeout(() => document.querySelector('.alert').remove(), 2000);
                         } else {
 
                             fetch('/comment/', {
@@ -325,39 +326,45 @@
                                 body: JSON.stringify(comment)
                             })
                             .then(response => {
-                                console.log(response)
+                                return response.json()
+                            })
+                            .then(response => {
+                                console.log(response.new_comment_id)
+                                const el = document.getElementById(`comment-list-${post_id}`)
+                                // create new li element
+                                const li = document.createElement('li')
+                                li.id = `comment-${response.new_comment_id}`
+                                li.innerHTML = `
+                                <div class="comment-img">
+                                    {% if request.user.profile.profile_pic. %}
+                                    <img src="{{ request.user.profile.profile_pic.url }}" class="img-responsive img-circle"
+                                        alt="Image" />
+                                    {% else %}
+                                    <img src="/static/img/user.png/" class="img-responsive img-circle"
+                                        alt="Image" />
+                                    {% endif %}
+                                </div>
+                                <div class="comment-text">
+                                    <strong><a href="">{{ request.user.get_full_name }}</a></strong>
+                                    <p>${this.comment_text}</p> <span class="date sub-text">Now</span>
+                                    <a onclick="modals.deleteComment(${response.new_comment_id})"><i class="fa fa-trash"></i></a>
+                                </div>
+                                `
+                                el.appendChild(li)
+                                // Empty comment input
+                                this.comment_text = '';
+
+                                // Increment Comment Count
+                                const postComment = document.getElementById(`post-comment-count-${post_id}`)
+                                const modalComment = document.getElementById(`modal-comment-count-${post_id}`)
+                                postComment.innerHTML = parseInt(postComment.innerHTML) + 1;
+                                modalComment.innerHTML = parseInt(modalComment.innerHTML) + 1;
                             })
                             .catch(error => {
                                 console.log(error)
                             })
 
-                            const el = document.getElementById(`comment-list-${post_id}`)
-                            // create new li element
-                            const li = document.createElement('li')
-                            li.innerHTML = `
-                            <div class="comment-img">
-                                {% if request.user.profile.profile_pic. %}
-                                <img src="{{ request.user.profile.profile_pic.url }}" class="img-responsive img-circle"
-                                    alt="Image" />
-                                {% else %}
-                                <img src="/static/img/user.png/" class="img-responsive img-circle"
-                                    alt="Image" />
-                                {% endif %}
-                            </div>
-                            <div class="comment-text">
-                                <strong><a href="">{{ request.user.get_full_name }}</a></strong>
-                                <p>${this.comment_text}</p> <span class="date sub-text">Now</span>
-                            </div>
-                            `
-                            el.appendChild(li)
-                            // Empty comment input
-                            this.comment_text = '';
-
-                            // Increment Comment Count
-                            const postComment = document.getElementById(`post-comment-count-${post_id}`)
-                            const modalComment = document.getElementById(`modal-comment-count-${post_id}`)
-                            postComment.innerHTML = parseInt(postComment.innerHTML) + 1;
-                            modalComment.innerHTML = parseInt(modalComment.innerHTML) + 1;
+                            
                         }
 				},
                 deleteComment(comment_id) {

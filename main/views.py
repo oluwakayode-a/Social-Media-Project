@@ -130,8 +130,6 @@ def delete_comment(request):
     return JsonResponse(response)
 
 
-
-
 @login_required
 def like_toggle(request):
     data = json.loads(request.body)
@@ -363,7 +361,7 @@ def inquiry(request, post_id):
         
         new_inquiry = Inquiry.objects.create(
             post=post,
-            post_author=post.post_author.username,
+            post_author=post.user.username,
             username_of_inquirer=request.user.username,
             first_name=first_name,
             last_name=last_name,
