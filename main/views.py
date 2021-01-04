@@ -97,13 +97,15 @@ def add_comment(request):
     new_comment.save()
     
     # create notification for all users except logged in user
-    users = User.objects.exclude(username=request.user.username)
-    for user in users:
+
+    user = post.user
+
+    if request.user != user:
         new_notification = Notification.objects.create(
             user=user,
             user_from=request.user,
             post=post,
-            text=f"{request.user.get_full_name()} commented on {post.user.get_full_name()}'s post",
+            text=f"{request.user.get_full_name()} commented on your post",
             notification_type='comment'
         )
         new_notification.save()

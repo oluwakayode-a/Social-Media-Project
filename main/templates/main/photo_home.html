@@ -262,7 +262,7 @@
 											<div class="comment-text">
 												<strong><a href="">{{ comment.user.get_full_name }}</a></strong>
 												<p>{{ comment.text }}</p> <span class="date sub-text">on {{ comment.created }}</span>
-												{% if post.author == request.user or comment.user == request.user %}
+												{% if post.user == request.user or comment.user == request.user %}
 												<a href="" @click.prevent="deleteComment({{ comment.id }})"><i class="fa fa-trash"></i></a>
 												{% endif %}
 											</div>
