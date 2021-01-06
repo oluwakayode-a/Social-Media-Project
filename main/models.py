@@ -78,7 +78,7 @@ class Suggestion(models.Model):
         ('improvement', 'Improvement'),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.CharField(max_length=10, choices=CHOICES)
+    category = models.CharField(max_length=50, choices=CHOICES)
     text = models.TextField()
 
     def __str__(self):
